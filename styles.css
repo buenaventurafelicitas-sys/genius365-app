@@ -155,3 +155,14 @@ html, body{
   font-size:10px;
   color:#cbd5e1;
 }
+/* ===== CINTURONES: JERARQUÍA VISUAL SEGURA ===== */
+
+/* Negrita para nombres de cinturón en badges */
+.badge{
+  font-weight: 700;
+}
+
+/* Un pelín más de presencia al texto del nivel */
+.badge b{
+  letter-spacing: .2px;
+}
