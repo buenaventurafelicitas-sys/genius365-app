@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 :root{
   /* Fondo */
   --bg:#152458;
@@ -475,5 +476,27 @@ button{
 /* 6) Inputs sin zoom raro en iOS */
 input, select, textarea{
   font-size: 16px;
+}
+``
+/* =========================
+   ✅ TIPOGRAFÍA DEFINITIVA
+   ========================= */
+html, body, button, input, select, textarea{
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+  line-height: 1.5;
+}
+
+h1, h2{
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.note{
+  font-weight: 500;
 }
 ``
