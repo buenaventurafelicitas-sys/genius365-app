@@ -20,16 +20,16 @@ const CONFIG = {
 };
 
 const defaultState = {
-  userType: "", // "" | "licensed" | "free"
+  userType: "",
   me: { name:"", role:"", area:"collab", belt:"white" },
   evidence: {
     trainingDone:false,
     elearningDone:false,
     examPassed:false,
-    usecase:{ idea:"", videoUrl:"", status:"draft" } // draft|submitted|approved|rejected
+    usecase:{ idea:"", videoUrl:"", status:"draft" }
   },
-  licenseRequests: [], // [{id,name,role,why,tasks,impact,status}]
-  caseInbox: []        // [{id,userName,area,idea,videoUrl,status}]
+  licenseRequests: [],
+  caseInbox: []
 };
 
 function load(){
@@ -39,7 +39,6 @@ function load(){
 function save(){ localStorage.setItem(APP.storageKey, JSON.stringify(state)); }
 
 let state = load();
-
 const app = document.getElementById("app");
 
 // Header titles
@@ -69,11 +68,8 @@ function render(route){
   (views[route] || home)();
 }
 
-/* =========================
-   ✅ NUEVO: helper para cinturones
-   ========================= */
+/* ✅ Helper: cinturón con clase + icono */
 function beltLabelHtml(beltId, beltName){
-  // genera: <span class="belt-label belt-white">Cinturón Blanco</span>
   return `<span class="belt-label belt-${beltId}">${escapeHtml(beltName)}</span>`;
 }
 
@@ -170,9 +166,7 @@ function belts(){
         <h2>Ruta de cinturones</h2>
         ${CONFIG.belts.map(b=>`
           <div class="card" style="margin-top:12px;">
-            <div class="badge belt-badge">
-              ${beltLabelHtml(b.id, b.name)}
-            </div>
+            <div class="badge">${beltLabelHtml(b.id, b.name)}</div>
             <p class="note">${beltRequirements(b.id)}</p>
           </div>
         `).join("")}
@@ -323,67 +317,13 @@ function admin(){
       <section class="card col12">
         <h2>Admin (Genius365)</h2>
         <p class="note">MVP local: aprobar/rechazar casos y solicitudes.</p>
-
-        <h3>Casos (cinturón negro)</h3>
-        ${renderCasesTable()}
-
-        <hr/>
-
-        <h3>Solicitudes de licencia (Free)</h3>
-        ${renderLicenseTable()}
+        <p class="note">(Tablas no incluidas aquí para mantener el reset estable)</p>
       </section>
     </div>
   `;
-
-  document.querySelectorAll("[data-case-approve]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.getAttribute("data-case-approve");
-      const c = state.caseInbox.find(x=>x.id===id);
-      if(!c) return;
-      c.status = "approved";
-      if((state.me.name || "Usuario") === c.userName){
-        state.evidence.usecase.status = "approved";
-        state.me.belt = "black";
-      }
-      save(); render("admin");
-    };
-  });
-
-  document.querySelectorAll("[data-case-reject]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.getAttribute("data-case-reject");
-      const c = state.caseInbox.find(x=>x.id===id);
-      if(!c) return;
-      c.status = "rejected";
-      if((state.me.name || "Usuario") === c.userName){
-        state.evidence.usecase.status = "rejected";
-      }
-      save(); render("admin");
-    };
-  });
-
-  document.querySelectorAll("[data-lic-approve]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.getAttribute("data-lic-approve");
-      const r = state.licenseRequests.find(x=>x.id===id);
-      if(!r) return;
-      r.status = "approved";
-      save(); render("admin");
-    };
-  });
-
-  document.querySelectorAll("[data-lic-reject]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.getAttribute("data-lic-reject");
-      const r = state.licenseRequests.find(x=>x.id===id);
-      if(!r) return;
-      r.status = "rejected";
-      save(); render("admin");
-    };
-  });
 }
 
-// ---------- Helpers ----------
+// Helpers
 function messageOnly(title, text){
   app.innerHTML = `
     <div class="grid">
@@ -429,38 +369,4 @@ function escapeHtml(str){
 
 function makeId(){
   return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
-}
-
-function renderCasesTable(){
-  if(state.caseInbox.length===0) return `<p class="note">No hay casos enviados todavía.</p>`;
-  const rows = state.caseInbox.map(c=>`
-    <tr>
-      <td>${escapeHtml(c.userName)}</td>
-      <td>${escapeHtml(areaObj(c.area).name)}</td>
-      <td>${escapeHtml(c.status)}</td>
-      <td><a href="${escapeHtml(c.videoUrl)}" target="_blank">Ver vídeo</a></td>
-      <td>
-        <button class="secondary" data-case-reject="${c.id}">Reject</button>
-        <button class="primary" data-case-approve="${c.id}">Approve</button>
-      </td>
-    </tr>
-  `).join("");
-  return `<table><thead><tr><th>Usuario</th><th>Área</th><th>Estado</th><th>Vídeo</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-
-function renderLicenseTable(){
-  if(state.licenseRequests.length===0) return `<p class="note">No hay solicitudes todavía.</p>`;
-  const rows = state.licenseRequests.map(r=>`
-    <tr>
-      <td>${escapeHtml(r.name)}</td>
-      <td>${escapeHtml(r.role)}</td>
-      <td>${escapeHtml(r.impact || "-")}</td>
-      <td>${escapeHtml(r.status)}</td>
-      <td>
-        <button class="secondary" data-lic-reject="${r.id}">Reject</button>
-        <button class="primary" data-lic-approve="${r.id}">Approve</button>
-      </td>
-    </tr>
-  `).join("");
-  return `<table><thead><tr><th>Solicitante</th><th>Puesto</th><th>Impacto</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
