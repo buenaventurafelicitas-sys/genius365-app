@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Genius365 — Francisco Aragón</title>
 
-  <!-- ✅ CARGA CORRECTA DE ESTILOS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -14,12 +14,7 @@
   <!-- TOP BAR -->
   <header class="topbar">
     <div class="brand">
-      <!-- ✅ EL LOGO SE PONE CON <img>, NO COMO TEXTO -->
-      <img
-        src="FA_LOGO.png"
-        alt="Francisco Aragón"
-        class="brand-logo"
-      />
+      <img src="FA_LOGO.png" alt="Francisco Aragón" class="brand-logo" />
 
       <div class="brand-text">
         <h1>Genius365 — Francisco Aragón</h1>
@@ -39,20 +34,12 @@
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ✅ CONTENEDOR QUE USA app.js -->
   <main class="container">
-    <div class="card">
-      <h2>Bienvenido/a 👋</h2>
-      <p>Elige tu situación para ver el recorrido correcto.</p>
-    </div>
+    <div id="app"></div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    Genius365 · Web App
-  </footer>
-
-  <!-- ✅ CARGA CORRECTA DEL JS -->
+  <!-- JS -->
   <script src="app.js"></script>
 </body>
 </html>
