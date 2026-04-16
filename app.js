@@ -19,7 +19,8 @@ const CONFIG = {
 
 // ===== Estado (localStorage para MVP) =====
 const KEY = "genius365_demo_v1";
-const defaultState = {
+const defaultState = {  
+  userType: "", // "licensed" | "free
   me: { name:"", role:"", area:"collab", belt:"white" },
   evidence: { trainingQR:false, elearning:false, exam:false, usecase:{ idea:"", videoUrl:"", status:"draft", publishedUrl:"" } },
   licenseRequests: [],
@@ -46,14 +47,41 @@ document.querySelectorAll("[data-route]").forEach(btn=>{
 });
 
 function render(route){
-  if(!state.me.name) route = "home"; // forzar onboarding
+  if(!state.userType){
+    return onboarding();
+  }
   const views = { home, belts, evidence, license, admin };
   (views[route] || home)();
 }
 render("home");
 
 // ===== Views =====
-function home(){
+functionfunction onboarding(){
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>Bienvenido/a</h2>
+        <p class="note">Elige tu situación para mostrarte el recorrido correcto.</p>
+        <div class="actions">
+          <button class="primary" id="btnLicensed">Tengo licencia de M365 Copilot</button>
+          <button class="secondary" id="btnFree">Uso Copilot Chat (Free) y quiero solicitar licencia</button>
+        </div>
+      </section>
+    </div>`;
+
+  document.getElementById("btnLicensed").onclick = () => {
+    state.userType = "licensed";
+    save(state);
+    render("home");
+  };
+
+  document.getElementById("btnFree").onclick = () => {
+    state.userType = "free";
+    save(state);
+    render("license");
+  };
+}
+home(){
   const b = beltObj(state.me.belt);
   const area = areaObj(state.me.area);
   const pct = computeProgress();
@@ -126,6 +154,69 @@ function evidence(){
   const canGreen  = (b==="yellow");
   const canBlack  = (b==="green");
   const e = state.evidence;
+     </section>
+  </div>`;
+}
+function license(){
+  // Si el usuario NO es "free", no debería estar aquí
+  if(state.userType !== "free"){
+    app.innerHTML = `
+      <div class="grid">
+        <section class="card col12">
+          <h2>Solicitud de licencia</h2>
+          <p class="note">
+            Esta sección es solo para personas que usan Copilot Chat (Free).
+          </p>
+        </section>
+      </div>
+    `;
+    return;
+  }
+
+  // Pantalla real para usuarios FREE
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>Solicitar licencia de Microsoft 365 Copilot</h2>
+
+        <p class="note">
+          Si actualmente utilizas Copilot Chat (Free) y crees que una licencia
+          completa de Microsoft 365 Copilot te ayudaría en tu trabajo, puedes
+          solicitarla aquí.
+        </p>
+
+        <label>¿Para qué usarías Copilot?</label>
+        <textarea id="why" rows="3"></textarea>
+
+        <label>¿Qué tareas mejorarías?</label>
+        <textarea id="tasks" rows="3"></textarea>
+
+        <label>Área / Rol</label>
+        <input id="role" type="text" />
+
+        <div class="actions">
+          <button class="primary" id="sendRequest">
+            Enviar solicitud
+          </button>
+        </div>
+      </section>
+    </div>
+  `;
+
+  document.getElementById("sendRequest").onclick = () => {
+    const req = {
+      why: document.getElementById("why").value.trim(),
+      tasks: document.getElementById("tasks").value.trim(),
+      role: document.getElementById("role").value.trim(),
+      status: "pending"
+    };
+
+    state.licenseRequests.push(req);
+    save(state);
+
+    alert("Solicitud enviada. El equipo Genius365 la revisará.");
+  };
+}
 
   app.innerHTML = `
   <div class="grid">
