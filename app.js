@@ -44,7 +44,7 @@ const app = document.getElementById("app");
 
 // Header titles
 document.getElementById("appTitle").innerText = `Genius365 — ${APP.clientName}`;
-document.getElementById("appSubtitle").innerText = `Cinturones (licensed) + Solicitud de licencia (Copilot Chat Free)`;
+document.getElementById("appSubtitle").innerText = `Cinturones (licensed) + Solicitud de licencia (Copilot Chat (Free))`;
 
 // Nav routing
 document.querySelectorAll("[data-route]").forEach(btn=>{
@@ -67,6 +67,14 @@ function render(route){
   }
   const views = { home, belts, evidence, license, admin };
   (views[route] || home)();
+}
+
+/* =========================
+   ✅ NUEVO: helper para cinturones
+   ========================= */
+function beltLabelHtml(beltId, beltName){
+  // genera: <span class="belt-label belt-white">Cinturón Blanco</span>
+  return `<span class="belt-label belt-${beltId}">${escapeHtml(beltName)}</span>`;
 }
 
 // ---------- Screens ----------
@@ -116,7 +124,7 @@ function home(){
       <section class="card col8">
         <h2>Mi progreso</h2>
         <div class="badge">Área: <b>${area.name}</b></div>
-        <div class="badge">Nivel: <b style="color:${belt.color}">${belt.name}</b></div>
+        <div class="badge">Nivel: ${beltLabelHtml(belt.id, belt.name)}</div>
         <div class="progress"><div style="width:${progressPct()}%"></div></div>
         <p class="note">Siguiente paso: ${nextStepText()}</p>
         <div class="actions">
@@ -162,7 +170,9 @@ function belts(){
         <h2>Ruta de cinturones</h2>
         ${CONFIG.belts.map(b=>`
           <div class="card" style="margin-top:12px;">
-            <div class="badge" style="color:${b.color}">${b.name}</div>
+            <div class="badge belt-badge">
+              ${beltLabelHtml(b.id, b.name)}
+            </div>
             <p class="note">${beltRequirements(b.id)}</p>
           </div>
         `).join("")}
@@ -393,6 +403,7 @@ function progressPct(){
   const idx = order.indexOf(state.me.belt);
   return Math.max(0, Math.min(100, idx * 33));
 }
+
 function beltRequirements(id){
   if(id==="white") return "Inicio. Asiste a una formación para pasar a Amarillo.";
   if(id==="yellow") return "Formación registrada. Completa e-learning + examen para Verde.";
@@ -400,6 +411,7 @@ function beltRequirements(id){
   if(id==="black") return "Caso aprobado. Eres Champion.";
   return "";
 }
+
 function nextStepText(){
   if(state.me.belt==="white") return "Confirmar asistencia a formación.";
   if(state.me.belt==="yellow") return "Completar e-learning y examen.";
@@ -408,14 +420,17 @@ function nextStepText(){
   if(state.me.belt==="black") return "Compartir y acompañar a otros.";
   return "";
 }
+
 function escapeHtml(str){
   return (str || "").toString()
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
+
 function makeId(){
   return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
 }
+
 function renderCasesTable(){
   if(state.caseInbox.length===0) return `<p class="note">No hay casos enviados todavía.</p>`;
   const rows = state.caseInbox.map(c=>`
@@ -432,6 +447,7 @@ function renderCasesTable(){
   `).join("");
   return `<table><thead><tr><th>Usuario</th><th>Área</th><th>Estado</th><th>Vídeo</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
+
 function renderLicenseTable(){
   if(state.licenseRequests.length===0) return `<p class="note">No hay solicitudes todavía.</p>`;
   const rows = state.licenseRequests.map(r=>`
