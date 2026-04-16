@@ -689,3 +689,21 @@ h1, h2{
   }
 }
 ``
+/* 🔴 PRUEBA: FORZAR MODO MÓVIL */
+.grid{
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.col4,
+.col6,
+.col8,
+.col12{
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.card{
+  max-width: 520px;
+  margin: 0 auto 16px;
+}
