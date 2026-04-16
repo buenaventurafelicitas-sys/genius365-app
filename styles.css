@@ -1,265 +1,123 @@
 /* =========================
-   VARIABLES
+   BASE
    ========================= */
-:root{
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-
-  --accent:#60a5fa;
-  --accent-2:#22c55e;
-
-  --danger:#fb7185;
-
-  --card-bg:rgba(11,18,32,.92);
-  --card-border:rgba(255,255,255,.10);
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 
-/* =========================
-   BASE / FIXES IMPORTANTES
-   ========================= */
-*{
-  box-sizing:border-box;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #020617, #070b14);
+  color: #e5e7eb;
 }
 
-html, body{
-  margin:0;
-  min-height:100vh;
-  overflow-x:hidden; /* evita la barra rara lateral */
-  color:var(--text);
-  background:#020617;
-}
-
-/* Tipos controlados (nada gigante) */
-body{ font-size:14px; line-height:1.35; }
-h1{ font-size:20px; margin:0; }
-h2{ font-size:18px; margin:0 0 10px; }
-h3{ font-size:14px; margin:16px 0 8px; }
-
-/* =========================
-   FONDO + HALO (VISIBLE Y SEGURO)
-   ========================= */
-/* El fondo base */
-body{
-  background: linear-gradient(180deg,#020617,#01030a);
-  position:relative;
-}
-
-/* Halo por detrás (no tapa nada, no genera barras) */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-30%;
-  z-index:-1;
-  pointer-events:none;
-
-  background:
-    radial-gradient(circle at 30% 30%, rgba(96,165,250,.35), transparent 55%),
-    radial-gradient(circle at 70% 60%, rgba(124,58,237,.35), transparent 55%),
-    radial-gradient(circle at 50% 80%, rgba(34,197,94,.25), transparent 60%);
-
-  animation: haloMove 40s ease-in-out infinite;
-  transform: translate3d(0,0,0);
-  will-change: transform;
-}
-
-@keyframes haloMove{
-  0%{ transform: translate3d(0,0,0); }
-  50%{ transform: translate3d(6%,4%,0); }
-  100%{ transform: translate3d(0,0,0); }
-}
-
-/* Si el usuario tiene “reduce motion”, no animamos */
-@media (prefers-reduced-motion: reduce){
-  body::before{ animation:none; }
+body {
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 /* =========================
    TOP BAR
    ========================= */
-.topbar{
-  padding:16px 18px;
-  border-bottom:1px solid var(--card-border);
-  background:rgba(11,18,32,.85);
+.topbar {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: rgba(11,18,32,.85);
   backdrop-filter: blur(8px);
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  align-items:center;
-  justify-content:space-between;
-}
 
-.brand h1{ letter-spacing:.2px; }
-.subtitle{
-  margin:4px 0 0;
-  font-size:12px;
-  color:var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* =========================
-   NAV
+   BRAND (LOGO + TEXTO)
    ========================= */
-.nav{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-/* Nav buttons (pills oscuras + glow suave) */
-.nav button{
-  background:rgba(15,23,42,.95);
-  color:var(--text);
-  border:1px solid rgba(96,165,250,.40);
-  padding:8px 14px;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow:0 0 6px rgba(96,165,250,.30);
+.brand-logo {
+  height: 32px;        /* ✅ TAMAÑO CONTROLADO */
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
 }
 
-.nav button:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 10px rgba(96,165,250,.45);
+.brand-text h1 {
+  margin: 0;
+  font-size: 18px;
 }
 
-/* Reset */
-.nav-right .danger,
-button.danger{
-  background:transparent;
-  color:var(--danger);
-  border:1px solid var(--danger);
-  padding:8px 14px;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow:none;
+.subtitle {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #94a3b8;
 }
 
 /* =========================
-   LAYOUT / CARDS
+   NAV + BOTONES NEÓN
    ========================= */
-.container{
-  max-width:1100px;
-  margin:0 auto;
-  padding:22px;
+.nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:16px;
+.nav button {
+  background: rgba(15,23,42,.95);
+  color: #e5e7eb;
+  border: 1px solid rgba(96,165,250,.45);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(96,165,250,.35);
 }
 
-@media(min-width:900px){
-  .col4{ grid-column:span 4; }
-  .col6{ grid-column:span 6; }
-  .col8{ grid-column:span 8; }
+.nav button:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 0 10px rgba(96,165,250,.55);
 }
 
-.card{
-  grid-column:span 12;
-  background:var(--card-bg);
-  border:1px solid var(--card-border);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 12px 32px rgba(0,0,0,.45);
+button.danger {
+  background: transparent;
+  border: 1px solid #fb7185;
+  color: #fb7185;
+  box-shadow: none;
 }
 
 /* =========================
-   BADGES / PROGRESS
+   LAYOUT
    ========================= */
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  border:1px solid var(--card-border);
-  background:rgba(15,23,42,.95);
-}
-
-.progress{
-  height:10px;
-  background:rgba(255,255,255,.08);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:12px;
-}
-
-.progress > div{
-  height:100%;
-  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 22px;
 }
 
 /* =========================
-   FORMS
+   CARD
    ========================= */
-label{
-  display:block;
-  margin:12px 0 6px;
-  font-size:12px;
-  color:var(--muted);
-}
-
-input, select, textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--card-border);
-  background:rgba(15,23,42,.95);
-  color:var(--text);
-}
-
-textarea{ min-height:100px; }
-
-/* =========================
-   BUTTONS (como “antes”: pills oscuras + glow suave)
-   ========================= */
-button{
-  background:rgba(15,23,42,.95);
-  color:var(--text);
-  border:1px solid rgba(96,165,250,.40);
-  padding:8px 16px;
-  border-radius:999px;
-  cursor:pointer;
-  box-shadow:0 0 6px rgba(96,165,250,.30);
-}
-
-button:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 10px rgba(96,165,250,.45);
-}
-
-/* Botón realmente “principal” (solo si lo usás con class="primary") */
-button.primary{
-  background:linear-gradient(90deg,var(--accent-2),var(--accent));
-  color:#020617;
-  font-weight:700;
-  border:none;
-  box-shadow:
-    0 0 12px rgba(96,165,250,.55),
-    0 0 20px rgba(34,197,94,.35);
+.card {
+  background: rgba(11,18,32,.92);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
 }
 
 /* =========================
-   TEXT / FOOTER
+   FOOTER
    ========================= */
-.note{
-  font-size:12px;
-  color:var(--muted);
+.footer {
+  padding: 18px;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
 }
-
-.footer{
-  padding:18px;
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  border-top:1px solid var(--card-border);
-}
-
-a{ color:var(--accent); }
-hr{
-  border:none;
-  border-top:1px solid var(--card-border);
-  margin:16px 0;
-}
-``
