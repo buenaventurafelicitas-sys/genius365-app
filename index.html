@@ -1,68 +1,45 @@
-function admin(){
-  app.innerHTML = `
-    <div class="grid">
-      <section class="card col12">
-        <h2>Admin (Genius365)</h2>
-        <p class="note">MVP local: aprobar/rechazar casos y solicitudes.</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Genius365 — Francisco Aragón</title>
 
-        <h3>Casos (Cinturón Negro)</h3>
-        ${renderCasesTable()}
+  <!-- CSS (cache-bust) -->
+  <link rel="stylesheet" href="styles.css?v=20260416a">
+</head>
 
-        <hr/>
+<body>
 
-        <h3>Solicitudes de licencia (Free)</h3>
-        ${renderLicenseTable()}
-      </section>
+  <header class="topbar">
+    <div class="brand">
+      <img src="FA_LOGO.png" alt="Francisco Aragón" class="brand-logo">
+
+      <div class="brand-text">
+        <h1 id="appTitle">Genius365 — Francisco Aragón</h1>
+        <p class="subtitle" id="appSubtitle">Cinturones (licensed) · Copilot Chat (Free)</p>
+      </div>
     </div>
-  `;
 
-  // Acciones Casos
-  document.querySelectorAll("[data-case-approve]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.dataset.caseApprove;
-      const c = state.caseInbox.find(x => x.id === id);
-      if(!c) return;
+    <nav class="nav">
+      <button data-route="home">Inicio</button>
+      <button data-route="belts">Cinturones</button>
+      <button data-route="evidence">Evidencias</button>
+      <button data-route="admin">Admin</button>
+    </nav>
 
-      c.status = "approved";
-      save();
-      render("admin");
-    };
-  });
+    <div class="nav-right">
+      <button id="resetBtn" class="danger">Reset</button>
+    </div>
+  </header>
 
-  document.querySelectorAll("[data-case-reject]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.dataset.caseReject;
-      const c = state.caseInbox.find(x => x.id === id);
-      if(!c) return;
+  <main id="app" class="container"></main>
 
-      c.status = "rejected";
-      save();
-      render("admin");
-    };
-  });
+  <footer class="footer">
+    Genius365 · Web App
+  </footer>
 
-  // Acciones Solicitudes
-  document.querySelectorAll("[data-lic-approve]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.dataset.licApprove;
-      const r = state.licenseRequests.find(x => x.id === id);
-      if(!r) return;
-
-      r.status = "approved";
-      save();
-      render("admin");
-    };
-  });
-
-  document.querySelectorAll("[data-lic-reject]").forEach(btn=>{
-    btn.onclick = ()=>{
-      const id = btn.dataset.licReject;
-      const r = state.licenseRequests.find(x => x.id === id);
-      if(!r) return;
-
-      r.status = "rejected";
-      save();
-      render("admin");
-    };
-  });
-}
+  <!-- JS (cache-bust) -->
+  <script src="app.js?v=20260416a"></script>
+</body>
+</html>
