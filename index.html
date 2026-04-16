@@ -2,54 +2,48 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Genius365</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Genius365 — Francisco Aragón</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
+
+  <!-- TOP BAR -->
   <header class="topbar">
-  <div class="brand">
-  <img src="FA_LOGO.png" alt="Francisco Aragón" class="brand-logo">
-  <div class="brand-text">
-    <h1>Genius365 — Francisco Aragón</h1>
-    <div class="subtitle">
-      Cinturones (licensed) + Solicitud de licencia (Copilot Chat Free)
+    <div class="brand">
+      <img src="FA_LOGO.png" alt="Francisco Aragón" class="brand-logo" />
+      <div class="brand-text">
+        <h1>Genius365 — Francisco Aragón</h1>
+        <div class="subtitle">
+          Cinturones (licensed) + Solicitud de licencia (Copilot Chat Free)
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <nav class="nav">
-      <button data-route="home">Inicio</button>
-      <button data-route="belts">Cinturones</button>
-      <button data-route="evidence">Evidencias</button>
-      <button data-route="license">Solicitar licencia</button>
-      <button data-route="admin">Admin</button>
+      <button>Inicio</button>
+      <button>Cinturones</button>
+      <button>Evidencias</button>
+      <button>Solicitar licencia</button>
+      <button>Admin</button>
+      <button class="danger">Reset</button>
     </nav>
-/* LOGO FRANCISCO ARAGÓN */
-.brand{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-logo{
-  height: 32px;   /* ✅ TAMAÑO BUENO (prueba 28–36px) */
-  width: auto;    /* mantiene proporción */
-  max-width: 140px;
-  object-fit: contain;
-}
-    <div class="nav-right">
-      <button id="resetBtn" class="danger">Reset</button>
-    </div>
   </header>
 
-  <main id="app" class="container"></main>
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div class="card">
+      <h2>Bienvenido/a 👋</h2>
+      <p>Elige tu situación para ver el recorrido correcto.</p>
+    </div>
+  </main>
 
   <footer class="footer">
-    <small>Genius365 · Web App</small>
+    Genius365 · Web App
   </footer>
 
   <script src="app.js"></script>
 </body>
 </html>
+``
