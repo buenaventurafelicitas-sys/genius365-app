@@ -3,9 +3,9 @@
   --bg:#152458;
   --bg2:#0d1736;
 
-  /* ===== SUPERFICIES (AZUL GRISÁCEO 🔑) ===== */
-  --header:#2a3556;   /* ✅ azul grisáceo */
-  --card:#2f3b63;     /* un pelín más claro que el header */
+  /* ===== AZUL GRISÁCEO (HEADER / CARDS) ===== */
+  --header:#2a3556;
+  --card:#2f3b63;
 
   /* ===== TEXTO ===== */
   --text:#e5e7eb;
@@ -16,7 +16,6 @@
   /* ===== ACENTOS ===== */
   --accent:#60a5fa;
   --accent2:#22c55e;
-
   --danger:#fb7185;
 }
 
@@ -43,7 +42,7 @@ html, body{
    ========================= */
 .topbar{
   padding:14px 18px;
-  background:rgba(42,53,86,.92); /* --header */
+  background:rgba(42,53,86,.92);
   backdrop-filter: blur(10px);
   border-bottom:1px solid var(--line);
 
@@ -92,7 +91,7 @@ html, body{
 }
 
 .nav button{
-  background:rgba(47,59,99,.92); /* mismo family que cards */
+  background:rgba(47,59,99,.92);
   border:1px solid rgba(120,180,255,.45);
   color:var(--text);
   padding:8px 14px;
@@ -127,7 +126,7 @@ html, body{
    CARDS
    ========================= */
 .card{
-  background:rgba(47,59,99,.94); /* --card */
+  background:rgba(47,59,99,.94);
   border:1px solid var(--line);
   border-radius:18px;
   padding:20px;
@@ -186,6 +185,49 @@ button.primary{
 }
 
 /* =========================
+   CINTURONES (NEGRITA + ICONO)
+   ========================= */
+/* Esto funciona con el HTML que genera app.js */
+
+.card p{
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* Icono base */
+.card p::before{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+/* Blanco */
+.card p:has(span.white)::before{
+  background:#f8fafc;
+  border:1px solid #cbd5e1;
+}
+
+/* Amarillo */
+.card p:has(span.yellow)::before{
+  background:#facc15;
+}
+
+/* Verde */
+.card p:has(span.green)::before{
+  background:#22c55e;
+}
+
+/* Negro */
+.card p:has(span.black)::before{
+  background:#020617;
+  border:1px solid #94a3b8;
+}
+
+/* =========================
    FOOTER
    ========================= */
 .footer{
@@ -194,42 +236,4 @@ button.primary{
   font-size:12px;
   color:var(--muted);
   border-top:1px solid var(--line);
-}
-/* =========================
-   CINTURONES (ICONO + NEGRITA)
-   ========================= */
-
-.belt{
-  font-weight:700;              /* negrita */
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-/* El circulito de color */
-.belt::before{
-  content:"";
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  display:inline-block;
-}
-
-/* Colores */
-.belt.white::before{
-  background:#f8fafc;
-  border:1px solid #cbd5e1;     /* para que se vea sobre azul */
-}
-
-.belt.yellow::before{
-  background:#facc15;
-}
-
-.belt.green::before{
-  background:#22c55e;
-}
-
-.belt.black::before{
-  background:#020617;
-  border:1px solid #94a3b8;     /* CLAVE para que el negro se vea */
 }
