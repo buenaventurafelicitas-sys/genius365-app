@@ -342,3 +342,33 @@ body{
   inset:-40px;
   background:
     radial-gradient(circle at top center,
+/* =========================
+   CINTURÓN NEGRO – ELITE
+   ========================= */
+
+/* Badge de Cinturón Negro */
+.badge.black,
+.badge.negro{
+  background: linear-gradient(
+    135deg,
+    #000000,
+    #111827,
+    #000000
+  );
+  color: #f9fafb; /* texto BLANCO PURO */
+  font-weight: 800;
+  letter-spacing: .6px;
+  border: 1px solid rgba(255,255,255,.35);
+  box-shadow:
+    0 0 12px rgba(250,204,21,.45),
+    0 0 30px rgba(0,0,0,.9);
+}
+
+/* Card especial cuando es Cinturón Negro */
+.card.black-belt{
+  background:
+    radial-gradient(circle at top center,
+      rgba(250,204,21,.12),
+      transparent 60%
+    ),
+    linear-gradient(180deg,#020617,#000000);
