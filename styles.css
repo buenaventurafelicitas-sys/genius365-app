@@ -430,3 +430,50 @@ button.secondary{
     width: 100%;
   }
 }
+/* =========================
+   ✅ FIX TIPOGRAFÍA (WEB + MÓVIL)
+   ========================= */
+
+/* 1) Bloquea la fuente en TODA la app */
+html, body, button, input, select, textarea{
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 2) Escala base correcta */
+html{ font-size: 16px; }
+body{ line-height: 1.45; }
+
+/* 3) Titulares consistentes */
+h2{
+  font-size: 20px;
+  line-height: 1.25;
+}
+@media (max-width: 768px){
+  h2{ font-size: 18px; }
+}
+
+/* 4) Texto normal legible */
+.note, p, label{
+  font-size: 14px;
+}
+@media (max-width: 768px){
+  .note, p, label{ font-size: 14px; }
+}
+
+/* 5) Botones con texto claro */
+button{
+  font-size: 14px;
+  line-height: 1.1;
+}
+@media (max-width: 768px){
+  button{ font-size: 15px; }
+}
+
+/* 6) Inputs sin zoom raro en iOS */
+input, select, textarea{
+  font-size: 16px;
+}
+``
