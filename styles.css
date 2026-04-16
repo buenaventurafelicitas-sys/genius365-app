@@ -590,3 +590,37 @@ h1, h2{
     padding: 8px 12px;
   }
 }
+/* ===== FIX DEFINITIVO LAYOUT MÓVIL ===== */
+@media (max-width: 768px){
+
+  /* Olvida el grid desktop */
+  .grid{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Todas las cards a ancho completo */
+  .col4,
+  .col6,
+  .col8,
+  .col12{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .card{
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .container{
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  body{
+    overflow-x: hidden;
+  }
+}
