@@ -6,7 +6,7 @@
   --muted:#94a3b8;
 
   --card:rgba(11,18,32,.92);
-  --line:rgba(255,255,255,.10);
+  --line:rgba(255,255,255,.12);
 
   --accent:#60a5fa;
   --accent2:#22c55e;
@@ -22,21 +22,19 @@
 html, body{
   margin:0;
   min-height:100vh;
-  overflow-x:hidden;
   color:var(--text);
   background:
     radial-gradient(circle at 20% 30%, rgba(96,165,250,.25), transparent 55%),
     radial-gradient(circle at 80% 70%, rgba(124,58,237,.22), transparent 60%),
-    radial-gradient(circle at 50% 85%, rgba(34,197,94,.18), transparent 65%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
+    linear-gradient(180deg,var(--bg),var(--bg2));
 }
 
-/* ===== TOP BAR ===== */
+/* HEADER */
 .topbar{
   padding:14px 18px;
+  background:rgba(11,18,32,.88);
+  backdrop-filter: blur(10px);
   border-bottom:1px solid var(--line);
-  background:rgba(11,18,32,.86);
-  backdrop-filter: blur(8px);
 
   display:flex;
   flex-wrap:wrap;
@@ -45,7 +43,7 @@ html, body{
   justify-content:space-between;
 }
 
-/* ===== BRAND (LOGO + TEXTO) ===== */
+/* BRAND */
 .brand{
   display:flex;
   align-items:center;
@@ -55,15 +53,12 @@ html, body{
 .brand-logo{
   height:32px;
   width:auto;
-  max-width:160px;
-  object-fit:contain;
-  flex-shrink:0;
+  max-width:140px;
 }
 
 .brand-text h1{
   margin:0;
   font-size:18px;
-  letter-spacing:.2px;
 }
 
 .subtitle{
@@ -72,54 +67,44 @@ html, body{
   color:var(--muted);
 }
 
-/* ===== NAV ===== */
+/* NAV */
 .nav{
   display:flex;
-  flex-wrap:wrap;
   gap:8px;
 }
 
 .nav button{
-  background:rgba(15,23,42,.92);
-  border:1px solid rgba(96,165,250,.35);
+  background:rgba(15,23,42,.9);
+  border:1px solid rgba(96,165,250,.45);
   color:var(--text);
   padding:8px 14px;
   border-radius:999px;
   cursor:pointer;
-  box-shadow:0 0 6px rgba(96,165,250,.25);
+  box-shadow:0 0 6px rgba(96,165,250,.3);
 }
 
 .nav button:hover{
   border-color:var(--accent);
-  box-shadow:0 0 10px rgba(96,165,250,.45);
+  box-shadow:0 0 10px rgba(96,165,250,.55);
 }
 
-/* Reset */
 .nav-right .danger{
   background:transparent;
   border:1px solid var(--danger);
   color:var(--danger);
   padding:8px 14px;
   border-radius:999px;
-  cursor:pointer;
-  box-shadow:none;
 }
 
-/* ===== LAYOUT ===== */
+/* LAYOUT */
 .container{
   max-width:1000px;
   margin:0 auto;
-  padding:18px;
+  padding:20px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:12px;
-}
-
+/* CARD (Bienvenido/a vuelve aquí) */
 .card{
-  grid-column:span 12;
   background:var(--card);
   border:1px solid var(--line);
   border-radius:16px;
@@ -127,69 +112,33 @@ html, body{
   box-shadow:0 12px 32px rgba(0,0,0,.45);
 }
 
-/* ===== TEXT ===== */
-.note{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.4;
-}
-
-/* ===== FORMS ===== */
-label{
-  display:block;
-  margin:12px 0 6px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-input, select, textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(15,23,42,.9);
-  color:var(--text);
-}
-
-textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-/* ===== BUTTONS (para onboarding: primary + secondary) ===== */
+/* BOTONES INTERIORES (onboarding) */
 .actions{
   display:flex;
   gap:10px;
-  flex-wrap:wrap;
   margin-top:12px;
-}
-
-button{
-  background:rgba(15,23,42,.92);
-  border:1px solid rgba(255,255,255,.14);
-  color:var(--text);
-  padding:10px 16px;
-  border-radius:999px;
-  cursor:pointer;
+  flex-wrap:wrap;
 }
 
 button.primary{
-  background:linear-gradient(90deg, var(--accent2), var(--accent));
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
   border:none;
   color:#020617;
   font-weight:700;
-  box-shadow:
-    0 0 10px rgba(96,165,250,.55),
-    0 0 18px rgba(34,197,94,.35);
+  padding:10px 16px;
+  border-radius:999px;
+  box-shadow:0 0 14px rgba(96,165,250,.6);
 }
 
 button.secondary{
-  background:rgba(15,23,42,.92);
-  border:1px solid rgba(96,165,250,.35);
+  background:rgba(15,23,42,.9);
+  border:1px solid rgba(96,165,250,.4);
   color:var(--text);
+  padding:10px 16px;
+  border-radius:999px;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .footer{
   padding:18px;
   text-align:center;
