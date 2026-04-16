@@ -1,3 +1,5 @@
+const BUILD = "ADMIN-TABLES-20260416a";
+console.log("✅ CARGÓ app.js:", BUILD);
 // Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
 const APP = {
   clientName: "Francisco Aragón",
