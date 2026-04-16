@@ -1,27 +1,25 @@
 :root{
-  /* ===== FONDO ===== */
+  /* FONDO */
   --bg:#152458;
   --bg2:#0d1736;
 
-  /* ===== AZUL GRISÁCEO (HEADER / CARDS) ===== */
+  /* SUPERFICIES */
   --header:#2a3556;
   --card:#2f3b63;
 
-  /* ===== TEXTO ===== */
+  /* TEXTO */
   --text:#e5e7eb;
   --muted:#b8c3e0;
 
   --line:rgba(255,255,255,.16);
 
-  /* ===== ACENTOS ===== */
+  /* ACENTOS */
   --accent:#60a5fa;
   --accent2:#22c55e;
   --danger:#fb7185;
 }
 
-/* =========================
-   BASE
-   ========================= */
+/* BASE */
 *{
   box-sizing:border-box;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
@@ -37,25 +35,19 @@ html, body{
     linear-gradient(180deg,var(--bg),var(--bg2));
 }
 
-/* =========================
-   HEADER
-   ========================= */
+/* HEADER */
 .topbar{
   padding:14px 18px;
   background:rgba(42,53,86,.92);
   backdrop-filter: blur(10px);
   border-bottom:1px solid var(--line);
-
   display:flex;
-  flex-wrap:wrap;
   gap:14px;
   align-items:center;
   justify-content:space-between;
 }
 
-/* =========================
-   BRAND
-   ========================= */
+/* BRAND */
 .brand{
   display:flex;
   align-items:center;
@@ -64,29 +56,22 @@ html, body{
 
 .brand-logo{
   height:32px;
-  width:auto;
   max-width:140px;
-  object-fit:contain;
 }
 
 .brand-text h1{
   margin:0;
   font-size:18px;
-  letter-spacing:.2px;
 }
 
 .subtitle{
-  margin:4px 0 0;
   font-size:12px;
   color:var(--muted);
 }
 
-/* =========================
-   NAV
-   ========================= */
+/* NAV */
 .nav{
   display:flex;
-  flex-wrap:wrap;
   gap:8px;
 }
 
@@ -96,99 +81,28 @@ html, body{
   color:var(--text);
   padding:8px 14px;
   border-radius:999px;
-  cursor:pointer;
-  box-shadow:0 0 6px rgba(120,180,255,.35);
 }
 
-.nav button:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 12px rgba(120,180,255,.6);
-}
-
-.nav-right .danger{
-  background:transparent;
-  border:1px solid var(--danger);
-  color:var(--danger);
-  padding:8px 14px;
-  border-radius:999px;
-}
-
-/* =========================
-   LAYOUT
-   ========================= */
+/* LAYOUT */
 .container{
   max-width:1000px;
   margin:0 auto;
   padding:22px;
 }
 
-/* =========================
-   CARDS
-   ========================= */
+/* CARDS */
 .card{
   background:rgba(47,59,99,.94);
   border:1px solid var(--line);
   border-radius:18px;
   padding:20px;
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.35),
-    0 0 0 1px rgba(255,255,255,.05);
 }
 
 /* =========================
-   TEXTO
+   ✅ CINTURONES (ESTO SÍ FUNCIONA)
    ========================= */
-.note{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.5;
-}
 
-/* =========================
-   FORMULARIOS
-   ========================= */
-input, select, textarea{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(42,53,86,.9);
-  color:var(--text);
-}
-
-/* =========================
-   BOTONES INTERIORES
-   ========================= */
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:14px;
-  flex-wrap:wrap;
-}
-
-button{
-  background:rgba(47,59,99,.92);
-  border:1px solid rgba(255,255,255,.22);
-  color:var(--text);
-  padding:10px 18px;
-  border-radius:999px;
-}
-
-button.primary{
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
-  border:none;
-  color:#0a1024;
-  font-weight:700;
-  box-shadow:
-    0 0 14px rgba(96,165,250,.75),
-    0 0 26px rgba(34,197,94,.45);
-}
-
-/* =========================
-   CINTURONES (NEGRITA + ICONO)
-   ========================= */
-/* Esto funciona con el HTML que genera app.js */
-
+/* Todos los textos de cinturones en negrita + icono */
 .card p{
   font-weight:700;
   display:flex;
@@ -196,44 +110,9 @@ button.primary{
   gap:8px;
 }
 
-/* Icono base */
+/* Icono neutro delante */
 .card p::before{
-  content:"";
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  flex-shrink:0;
-}
-
-/* Blanco */
-.card p:has(span.white)::before{
-  background:#f8fafc;
-  border:1px solid #cbd5e1;
-}
-
-/* Amarillo */
-.card p:has(span.yellow)::before{
-  background:#facc15;
-}
-
-/* Verde */
-.card p:has(span.green)::before{
-  background:#22c55e;
-}
-
-/* Negro */
-.card p:has(span.black)::before{
-  background:#020617;
-  border:1px solid #94a3b8;
-}
-
-/* =========================
-   FOOTER
-   ========================= */
-.footer{
-  padding:18px;
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  border-top:1px solid var(--line);
+  content:"●";
+  font-size:10px;
+  color:#cbd5e1;
 }
