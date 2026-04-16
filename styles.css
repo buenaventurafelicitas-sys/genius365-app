@@ -640,3 +640,52 @@ h1, h2{
     white-space: nowrap;
   }
 }
+/* =========================
+   ✅ MOBILE REAL (STOP DESKTOP)
+   ========================= */
+@media (max-width: 900px){
+
+  /* Olvidar grid y columnas */
+  .grid{
+    display: block !important;
+  }
+
+  .col4,
+  .col6,
+  .col8,
+  .col12{
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Cards simples, centradas */
+  .card{
+    width: 100% !important;
+    max-width: 520px;     /* 🔑 evita sensación de bloque monstruo */
+    margin: 0 auto 16px;
+    padding: 16px;
+  }
+
+  /* Container centrado */
+  .container{
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Formulario mobile-friendly */
+  input,
+  select,
+  textarea{
+    width: 100%;
+  }
+
+  .actions{
+    flex-direction: column;
+  }
+
+  button{
+    width: 100%;
+  }
+}
+``
