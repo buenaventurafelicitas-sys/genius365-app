@@ -1,3 +1,5 @@
+alert("APP.JS SE ESTA EJECUTANDO");
+
 /***********************
  * GENIUS365 — APP.JS
  * 2 caminos:
