@@ -565,3 +565,35 @@ function nextStepText(){
   if(b==="black") return "¡Ya eres Champion! Comparte y acompaña a otros usuarios.";
   return "";
 }
+// ===== FIXES MINIMOS PARA QUE LA APP NO SE ROMPA =====
+
+function escapeHtml(str){
+  return (str || "").toString();
+}
+
+function nextStepText(){
+  if(state.me.belt === "white") return "Asiste a una formación para avanzar a Amarillo.";
+  if(state.me.belt === "yellow") return "Completa el e-learning y el examen.";
+  if(state.me.belt === "green") return "Entrega un caso real para validación.";
+  return "¡Ya eres Champion!";
+}
+
+function questsForArea(area){
+  if(area === "collab") return ["Crear documento", "Compartir carpeta", "Resumen con Copilot"];
+  if(area === "comm") return ["Resumen de reunión", "Correo con Copilot"];
+  if(area === "prod") return ["Buscar insights", "Analizar datos"];
+  if(area === "auto") return ["Agent demo", "Automatizar proceso"];
+  return [];
+}
+
+function renderBeltCard(b){
+  return `
+    <div class="card" style="margin-top:10px;">
+      <div class="badge" style="color:${b.color}">
+        ${b.name}
+      </div>
+      <p class="note">${(b.req || []).join(" · ")}</p>
+    </div>
+  `;
+}
+``
