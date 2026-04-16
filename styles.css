@@ -280,3 +280,43 @@ hr{
 body{
   outline: 6px solid red !important;
 }
+/* =========================
+   GAMER WOW – CAPA VISIBLE
+   ========================= */
+
+/* Fondo animado MÁS PRESENTE */
+body{
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(96,165,250,.12) 0px,
+      rgba(96,165,250,.12) 2px,
+      transparent 2px,
+      transparent 120px
+    ),
+    linear-gradient(180deg,#020617,#02040a) !important;
+}
+
+/* Animación VISIBLE */
+body{
+  animation: backgroundPulse 12s ease-in-out infinite;
+}
+
+@keyframes backgroundPulse{
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* SOMBRA GAMER EN TODA LA APP */
+.container{
+  position:relative;
+  z-index:1;
+}
+
+.container::before{
+  content:"";
+  position:absolute;
+  inset:-40px;
+  background:
+    radial-gradient(circle at top center,
