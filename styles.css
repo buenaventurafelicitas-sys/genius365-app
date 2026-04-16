@@ -388,4 +388,47 @@ a{ color:var(--accent); }
     font-size:16px;
   }
 }
-``
+/* =========================
+   ✅ LAYOUT RESPONSIVO REAL
+   (no depende de "mobile vs desktop")
+   ========================= */
+@media (max-width: 1200px){
+
+  /* Grid siempre a una columna si no hay ancho */
+  .grid{
+    grid-template-columns: 1fr !important;
+  }
+
+  .col4,
+  .col6,
+  .col8,
+  .col12{
+    grid-column: span 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Cards razonables y centradas */
+  .card{
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto 16px;
+    padding: 16px;
+  }
+
+  /* Container sin empujar */
+  .container{
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Acciones apiladas */
+  .actions{
+    flex-direction: column;
+  }
+
+  .actions button{
+    width: 100%;
+  }
+}
