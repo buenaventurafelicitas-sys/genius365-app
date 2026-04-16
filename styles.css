@@ -4,8 +4,15 @@
   --line:rgba(255,255,255,.10);
 }
 *{ box-sizing:border-box; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; }
-body{ margin:0; background:linear-gradient(180deg,var(--bg),#070b14); color:var(--text); }
-
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(96,165,250,0.15), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(167,139,250,0.12), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(52,211,153,0.10), transparent 45%),
+    linear-gradient(180deg, #040812, #02050c);
+}
 .topbar{
   padding:16px 18px; border-bottom:1px solid var(--line);
   background:rgba(18,26,43,.65); backdrop-filter: blur(8px);
