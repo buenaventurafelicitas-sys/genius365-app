@@ -1,28 +1,256 @@
 :root{
-  /* FONDO */
+  /* Fondo */
   --bg:#152458;
   --bg2:#0d1736;
 
-  /* SUPERFICIES */
+  /* Superficies (azul grisáceo) */
   --header:#2a3556;
   --card:#2f3b63;
 
-  /* TEXTO */
+  /* Texto */
   --text:#e5e7eb;
   --muted:#b8c3e0;
 
   --line:rgba(255,255,255,.16);
 
-  /* ACENTOS */
+  /* Acentos */
   --accent:#60a5fa;
   --accent2:#22c55e;
   --danger:#fb7185;
 }
+
+*{
+  box-sizing:border-box;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+}
+
+html, body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 18% 28%, rgba(150,200,255,.45), transparent 55%),
+    radial-gradient(circle at 82% 68%, rgba(190,160,255,.42), transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+}
+
+/* HEADER */
+.topbar{
+  padding:14px 18px;
+  background:rgba(42,53,86,.92);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* BRAND */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand-logo{
+  height:32px;
+  width:auto;
+  max-width:140px;
+  object-fit:contain;
+}
+
+.brand-text h1{
+  margin:0;
+  font-size:18px;
+  letter-spacing:.2px;
+}
+
+.subtitle{
+  margin:4px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* NAV */
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.nav button{
+  background:rgba(47,59,99,.92);
+  border:1px solid rgba(120,180,255,.45);
+  color:var(--text);
+  padding:8px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:0 0 6px rgba(120,180,255,.35);
+}
+
+.nav button:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 12px rgba(120,180,255,.6);
+}
+
+.nav-right .danger{
+  background:transparent;
+  border:1px solid var(--danger);
+  color:var(--danger);
+  padding:8px 14px;
+  border-radius:999px;
+}
+
+/* LAYOUT */
+.container{
+  max-width:1000px;
+  margin:0 auto;
+  padding:22px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:16px;
+}
+
+@media(min-width:900px){
+  .col4{ grid-column:span 4; }
+  .col6{ grid-column:span 6; }
+  .col8{ grid-column:span 8; }
+  .col12{ grid-column:span 12; }
+}
+
+/* CARDS */
+.card{
+  background:rgba(47,59,99,.94);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.35),
+    0 0 0 1px rgba(255,255,255,.05);
+}
+
+/* BADGES */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(42,53,86,.65);
+}
+
+/* PROGRESS */
+.progress{
+  height:10px;
+  background:rgba(255,255,255,.10);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:12px;
+}
+
+.progress > div{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+/* TEXT */
+.note{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* FORMS */
+label{
+  display:block;
+  margin:12px 0 6px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(42,53,86,.85);
+  color:var(--text);
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+/* ACTIONS + BUTTONS */
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+button{
+  background:rgba(47,59,99,.92);
+  border:1px solid rgba(255,255,255,.22);
+  color:var(--text);
+  padding:10px 18px;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+button.primary{
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border:none;
+  color:#0a1024;
+  font-weight:700;
+  box-shadow:
+    0 0 14px rgba(96,165,250,.55),
+    0 0 24px rgba(34,197,94,.35);
+}
+
+button.secondary{
+  background:rgba(47,59,99,.92);
+  border:1px solid rgba(120,180,255,.45);
+}
+
+/* TABLES (admin) */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+th, td{
+  border-bottom:1px solid rgba(255,255,255,.12);
+  padding:10px;
+  text-align:left;
+  font-size:13px;
+}
+a{ color:var(--accent); }
+
+/* FOOTER */
+.footer{
+  padding:18px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  border-top:1px solid var(--line);
+}
+
 /* =========================
-   CINTURONES (NEGRITA + ICONO)
+   ✅ CINTURONES: NEGRITA + ICONO
+   (Esto funciona cuando app.js usa .belt-label)
    ========================= */
 .belt-label{
-  font-weight:700;
+  font-weight:800;
   display:inline-flex;
   align-items:center;
   gap:8px;
@@ -54,129 +282,6 @@
 /* Negro (legible) */
 .belt-black{ color:#f8fafc; }
 .belt-black::before{
-  background:#020617;
-  border:1px solid #94a3b8;
-}
-
-/* BASE */
-*{
-  box-sizing:border-box;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-}
-
-html, body{
-  margin:0;
-  min-height:100vh;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 18% 28%, rgba(150,200,255,.45), transparent 55%),
-    radial-gradient(circle at 82% 68%, rgba(190,160,255,.42), transparent 60%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-}
-
-/* HEADER */
-.topbar{
-  padding:14px 18px;
-  background:rgba(42,53,86,.92);
-  backdrop-filter: blur(10px);
-  border-bottom:1px solid var(--line);
-  display:flex;
-  gap:14px;
-  align-items:center;
-  justify-content:space-between;
-}
-
-/* BRAND */
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.brand-logo{
-  height:32px;
-  max-width:140px;
-}
-
-.brand-text h1{
-  margin:0;
-  font-size:18px;
-}
-
-.subtitle{
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* NAV */
-.nav{
-  display:flex;
-  gap:8px;
-}
-
-.nav button{
-  background:rgba(47,59,99,.92);
-  border:1px solid rgba(120,180,255,.45);
-  color:var(--text);
-  padding:8px 14px;
-  border-radius:999px;
-}
-
-/* LAYOUT */
-.container{
-  max-width:1000px;
-  margin:0 auto;
-  padding:22px;
-}
-
-/* CARDS */
-.card{
-  background:rgba(47,59,99,.94);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-}
-
-/* =========================
-   ✅ CINTURONES (ESTO SÍ FUNCIONA)
-   ========================= */
-
-/* Todos los textos de cinturones en negrita + icono */
-.card p{
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-/* Icono neutro delante */
-.card p::before{
-  content:"●";
-  font-size:10px;
-  color:#cbd5e1;
-}
-/* ===== CINTURONES: JERARQUÍA VISUAL SEGURA ===== */
-
-/* Negrita para nombres de cinturón en badges */
-.badge{
-  font-weight: 700;
-}
-
-/* Un pelín más de presencia al texto del nivel */
-.badge b{
-  letter-spacing: .2px;
-}
-/* ===== FIX CINTURÓN NEGRO (VISIBILIDAD + ELITE) ===== */
-
-.belt-black{
-  color:#f8fafc;               /* texto blanco, se lee */
-  font-weight:700;
-}
-
-.belt-black::before{
-  background:#0f172a;          /* negro azulado, no negro puro */
-  border:2px solid #e5e7eb;    /* aro blanco */
-  box-shadow:
-    0 0 0 2px rgba(255,255,255,.15),  /* separación del fondo */
-    0 0 8px rgba(255,255,255,.35);    /* glow suave */
+  background:#0b1020;         /* negro azulado */
+  border:2px solid #e5e7eb;   /* aro blanco para contraste */
 }
