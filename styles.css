@@ -195,3 +195,41 @@ button.primary{
   color:var(--muted);
   border-top:1px solid var(--line);
 }
+/* =========================
+   CINTURONES (ICONO + NEGRITA)
+   ========================= */
+
+.belt{
+  font-weight:700;              /* negrita */
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* El circulito de color */
+.belt::before{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* Colores */
+.belt.white::before{
+  background:#f8fafc;
+  border:1px solid #cbd5e1;     /* para que se vea sobre azul */
+}
+
+.belt.yellow::before{
+  background:#facc15;
+}
+
+.belt.green::before{
+  background:#22c55e;
+}
+
+.belt.black::before{
+  background:#020617;
+  border:1px solid #94a3b8;     /* CLAVE para que el negro se vea */
+}
