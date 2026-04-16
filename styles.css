@@ -166,3 +166,17 @@ html, body{
 .badge b{
   letter-spacing: .2px;
 }
+/* ===== FIX CINTURÓN NEGRO (VISIBILIDAD + ELITE) ===== */
+
+.belt-black{
+  color:#f8fafc;               /* texto blanco, se lee */
+  font-weight:700;
+}
+
+.belt-black::before{
+  background:#0f172a;          /* negro azulado, no negro puro */
+  border:2px solid #e5e7eb;    /* aro blanco */
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.15),  /* separación del fondo */
+    0 0 8px rgba(255,255,255,.35);    /* glow suave */
+}
