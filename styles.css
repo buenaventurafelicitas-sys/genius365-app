@@ -18,7 +18,79 @@
   --accent2:#22c55e;
   --danger:#fb7185;
 }
+/* =========================
+   ✅ MOBILE FRIENDLY (CIERRE DEL DÍA)
+   ========================= */
+@media (max-width: 768px){
 
+  /* Header apilado y respirable */
+  .topbar{
+    flex-direction: column;
+    align-items: flex-start;
+    gap:10px;
+  }
+
+  .nav{
+    flex-wrap: wrap;
+    gap:6px;
+  }
+
+  .nav button{
+    padding:8px 12px;
+    font-size:13px;
+  }
+
+  /* Grid = una columna */
+  .grid{
+    grid-template-columns: 1fr;
+  }
+
+  .col4,
+  .col6,
+  .col8,
+  .col12{
+    grid-column: span 12;
+  }
+
+  /* Cards con más aire */
+  .card{
+    padding:18px;
+    border-radius:16px;
+  }
+
+  /* Botones grandes y cómodos */
+  button{
+    width:100%;
+    justify-content:center;
+  }
+
+  .actions{
+    flex-direction: column;
+    gap:10px;
+  }
+
+  /* Inputs más tocables */
+  input,
+  select,
+  textarea{
+    font-size:16px; /* evita zoom en iOS */
+  }
+
+  /* Texto un pelín más legible */
+  h2{
+    font-size:18px;
+  }
+
+  .note{
+    font-size:13px;
+  }
+
+  /* Progreso visible también en móvil */
+  .progress{
+    height:12px;
+  }
+}
+``
 *{
   box-sizing:border-box;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
