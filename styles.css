@@ -363,12 +363,3 @@ body{
     0 0 12px rgba(250,204,21,.45),
     0 0 30px rgba(0,0,0,.9);
 }
-
-/* Card especial cuando es Cinturón Negro */
-.card.black-belt{
-  background:
-    radial-gradient(circle at top center,
-      rgba(250,204,21,.12),
-      transparent 60%
-    ),
-    linear-gradient(180deg,#020617,#000000);
