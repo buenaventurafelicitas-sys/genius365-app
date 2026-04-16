@@ -360,3 +360,48 @@ button.secondary{
 .belt-black .belt-title{
   color:#e5e7eb;
 }
+/* =========================
+   NIVEL EN "MI PROGRESO"
+   ========================= */
+
+.progress-level{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  font-weight:800;
+  font-size:14px;
+}
+
+/* reutilizamos las mismas bolitas de cinturones */
+.progress-level .belt-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* Colores (igual que en la vista Cinturones) */
+.progress-level.belt-white .belt-dot{
+  background:#f8fafc;
+  border:1px solid #cbd5f5;
+}
+.progress-level.belt-white .belt-title{ color:#f8fafc; }
+
+.progress-level.belt-yellow .belt-dot{
+  background:#facc15;
+}
+.progress-level.belt-yellow .belt-title{ color:#facc15; }
+
+.progress-level.belt-green .belt-dot{
+  background:#22c55e;
+}
+.progress-level.belt-green .belt-title{ color:#22c55e; }
+
+.progress-level.belt-black .belt-dot{
+  background:#020617;
+  border:2px solid #94a3b8; /* aro para que se vea */
+}
+.progress-level.belt-black .belt-title{
+  color:#e5e7eb;
+}
