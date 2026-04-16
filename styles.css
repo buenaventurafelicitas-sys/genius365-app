@@ -274,3 +274,9 @@ hr{
   margin:16px 0;
 }
 ``
+/* =========================
+   DEBUG VISUAL – DEBE VERSE
+   ========================= */
+body{
+  outline: 6px solid red !important;
+}
