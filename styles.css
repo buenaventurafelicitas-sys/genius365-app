@@ -18,6 +18,45 @@
   --accent2:#22c55e;
   --danger:#fb7185;
 }
+/* =========================
+   CINTURONES (NEGRITA + ICONO)
+   ========================= */
+.belt-label{
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+
+.belt-label::before{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* Blanco */
+.belt-white{ color:#f8fafc; }
+.belt-white::before{
+  background:#f8fafc;
+  border:1px solid #cbd5e1;
+}
+
+/* Amarillo */
+.belt-yellow{ color:#fde047; }
+.belt-yellow::before{ background:#facc15; }
+
+/* Verde */
+.belt-green{ color:#34d399; }
+.belt-green::before{ background:#22c55e; }
+
+/* Negro (legible) */
+.belt-black{ color:#f8fafc; }
+.belt-black::before{
+  background:#020617;
+  border:1px solid #94a3b8;
+}
 
 /* BASE */
 *{
