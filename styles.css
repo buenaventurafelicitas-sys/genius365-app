@@ -404,3 +404,29 @@ button.secondary{
 .progress > div{
   box-shadow: 0 0 12px rgba(96,165,250,.6);
 }
+/* =========================
+   ✅ FIX CENTRADO EN MÓVIL
+   ========================= */
+@media (max-width: 768px){
+
+  /* Asegura centrado horizontal real */
+  .container{
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Grid ocupa todo el ancho disponible */
+  .grid{
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  /* Cards centradas y a ancho completo */
+  .card{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+}
