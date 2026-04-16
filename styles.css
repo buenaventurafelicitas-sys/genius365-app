@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root{
   /* Fondo */
   --bg:#152458;
@@ -7,6 +8,7 @@
   /* Superficies (azul grisáceo) */
   --header:#2a3556;
   --card:#2f3b63;
+  --card2:#24345b; /* sombra/gradiente interno */
 
   /* Texto */
   --text:#e5e7eb;
@@ -19,95 +21,37 @@
   --accent2:#22c55e;
   --danger:#fb7185;
 }
+
 /* =========================
-   ✅ MOBILE FRIENDLY (CIERRE DEL DÍA)
+   BASE
    ========================= */
-@media (max-width: 768px){
-
-  /* Header apilado y respirable */
-  .topbar{
-    flex-direction: column;
-    align-items: flex-start;
-    gap:10px;
-  }
-
-  .nav{
-    flex-wrap: wrap;
-    gap:6px;
-  }
-
-  .nav button{
-    padding:8px 12px;
-    font-size:13px;
-  }
-
-  /* Grid = una columna */
-  .grid{
-    grid-template-columns: 1fr;
-  }
-
-  .col4,
-  .col6,
-  .col8,
-  .col12{
-    grid-column: span 12;
-  }
-
-  /* Cards con más aire */
-  .card{
-    padding:18px;
-    border-radius:16px;
-  }
-
-  /* Botones grandes y cómodos */
-  button{
-    width:100%;
-    justify-content:center;
-  }
-
-  .actions{
-    flex-direction: column;
-    gap:10px;
-  }
-
-  /* Inputs más tocables */
-  input,
-  select,
-  textarea{
-    font-size:16px; /* evita zoom en iOS */
-  }
-
-  /* Texto un pelín más legible */
-  h2{
-    font-size:18px;
-  }
-
-  .note{
-    font-size:13px;
-  }
-
-  /* Progreso visible también en móvil */
-  .progress{
-    height:12px;
-  }
-}
-``
 *{
   box-sizing:border-box;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
 }
 
 html, body{
   margin:0;
   min-height:100vh;
   color:var(--text);
+  font-family:'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+
   background:
     radial-gradient(circle at 18% 28%, rgba(150,200,255,.45), transparent 55%),
     radial-gradient(circle at 82% 68%, rgba(190,160,255,.42), transparent 60%),
     linear-gradient(180deg,var(--bg),var(--bg2));
+
+  overflow-x:hidden; /* evita barras raras */
 }
 
-/* HEADER */
+body{
+  line-height:1.5;
+}
+
+/* =========================
+   HEADER / TOPBAR
+   ========================= */
 .topbar{
   padding:14px 18px;
   background:rgba(42,53,86,.92);
@@ -138,7 +82,7 @@ html, body{
 .brand-text h1{
   margin:0;
   font-size:18px;
-  letter-spacing:.2px;
+  letter-spacing:-0.01em;
 }
 
 .subtitle{
@@ -152,6 +96,7 @@ html, body{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
+  align-items:center;
 }
 
 .nav button{
@@ -161,12 +106,13 @@ html, body{
   padding:8px 14px;
   border-radius:999px;
   cursor:pointer;
+
   box-shadow:0 0 6px rgba(120,180,255,.35);
 }
 
 .nav button:hover{
   border-color:var(--accent);
-  box-shadow:0 0 12px rgba(120,180,255,.6);
+  box-shadow:0 0 12px rgba(120,180,255,.60);
 }
 
 .nav-right .danger{
@@ -175,40 +121,46 @@ html, body{
   color:var(--danger);
   padding:8px 14px;
   border-radius:999px;
+  cursor:pointer;
+  box-shadow:none;
 }
 
-/* LAYOUT */
+/* =========================
+   LAYOUT
+   ========================= */
 .container{
   max-width:1000px;
   margin:0 auto;
   padding:22px;
 }
 
+/* Grid desktop */
 .grid{
   display:grid;
-  grid-template-columns:repeat(12,1fr);
+  grid-template-columns:repeat(12, 1fr);
   gap:16px;
 }
 
-@media(min-width:900px){
-  .col4{ grid-column:span 4; }
-  .col6{ grid-column:span 6; }
-  .col8{ grid-column:span 8; }
-  .col12{ grid-column:span 12; }
-}
+/* Column spans (desktop) */
+.col4{ grid-column:span 4; }
+.col6{ grid-column:span 6; }
+.col8{ grid-column:span 8; }
+.col12{ grid-column:span 12; }
 
-/* CARDS */
+/* =========================
+   CARDS / COMPONENTS
+   ========================= */
 .card{
-  background:rgba(47,59,99,.94);
+  background:linear-gradient(160deg, rgba(47,59,99,.96), rgba(36,52,91,.96));
   border:1px solid var(--line);
   border-radius:18px;
   padding:20px;
+
   box-shadow:
     0 18px 45px rgba(0,0,0,.35),
     0 0 0 1px rgba(255,255,255,.05);
 }
 
-/* BADGES */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -217,10 +169,16 @@ html, body{
   border-radius:999px;
   font-size:12px;
   border:1px solid rgba(255,255,255,.18);
-  background:rgba(42,53,86,.65);
+  background:rgba(42,53,86,.55);
 }
 
-/* PROGRESS */
+.note{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* Progress */
 .progress{
   height:10px;
   background:rgba(255,255,255,.10);
@@ -228,20 +186,15 @@ html, body{
   overflow:hidden;
   margin-top:12px;
 }
-
 .progress > div{
   height:100%;
   background:linear-gradient(90deg,var(--accent2),var(--accent));
+  box-shadow:0 0 12px rgba(96,165,250,.55);
 }
 
-/* TEXT */
-.note{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.5;
-}
-
-/* FORMS */
+/* =========================
+   FORMS
+   ========================= */
 label{
   display:block;
   margin:12px 0 6px;
@@ -263,7 +216,9 @@ textarea{
   resize:vertical;
 }
 
-/* ACTIONS + BUTTONS */
+/* =========================
+   BUTTONS (neón controlado)
+   ========================= */
 .actions{
   display:flex;
   gap:12px;
@@ -286,16 +241,26 @@ button.primary{
   color:#0a1024;
   font-weight:700;
   box-shadow:
-    0 0 14px rgba(96,165,250,.55),
+    0 0 14px rgba(96,165,250,.60),
     0 0 24px rgba(34,197,94,.35);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+button.primary:hover{
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 16px rgba(96,165,250,.80),
+    0 0 30px rgba(34,197,94,.55);
 }
 
 button.secondary{
-  background:rgba(47,59,99,.92);
-  border:1px solid rgba(120,180,255,.45);
+  background:rgba(15,23,42,.70);
+  border:1px solid rgba(96,165,250,.45);
+  box-shadow:0 0 10px rgba(96,165,250,.22);
 }
 
-/* TABLES (admin) */
+/* =========================
+   TABLES (admin)
+   ========================= */
 table{
   width:100%;
   border-collapse:collapse;
@@ -309,7 +274,9 @@ th, td{
 }
 a{ color:var(--accent); }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+   ========================= */
 .footer{
   padding:18px;
   text-align:center;
@@ -319,8 +286,8 @@ a{ color:var(--accent); }
 }
 
 /* =========================
-   ✅ CINTURONES: NEGRITA + ICONO
-   (Esto funciona cuando app.js usa .belt-label)
+   CINTURONES (negrita + icono)
+   - Esto funciona si en tu HTML/JS existe .belt-label y .belt-white/yellow/green/black
    ========================= */
 .belt-label{
   font-weight:800;
@@ -352,358 +319,73 @@ a{ color:var(--accent); }
 .belt-green{ color:#34d399; }
 .belt-green::before{ background:#22c55e; }
 
-/* Negro (legible) */
+/* Negro (legible en dark) */
 .belt-black{ color:#f8fafc; }
 .belt-black::before{
-  background:#0b1020;         /* negro azulado */
-  border:2px solid #e5e7eb;   /* aro blanco para contraste */
+  background:#0b1020;        /* negro azulado */
+  border:2px solid #e5e7eb;  /* aro blanco para contraste */
 }
+
 /* =========================
-   🔥 RECUPERAR LOOK NEÓN / HERO
+   ✅ MOBILE REAL (funcional y bonito)
    ========================= */
+@media (max-width: 900px){
 
-/* Tarjeta principal de inicio */
-.card h2{
-  text-shadow: 0 0 12px rgba(96,165,250,.35);
-}
-
-/* Botones principales con neón */
-button.primary{
-  background: linear-gradient(90deg,#22c55e,#60a5fa);
-  color:#020617;
-  box-shadow:
-    0 0 12px rgba(96,165,250,.6),
-    0 0 28px rgba(34,197,94,.4);
-  transition: all .2s ease;
-}
-
-button.primary:hover{
-  transform: translateY(-1px);
-  box-shadow:
-    0 0 16px rgba(96,165,250,.8),
-    0 0 36px rgba(34,197,94,.6);
-}
-
-/* Botones secundarios mejor definidos */
-button.secondary{
-  backdrop-filter: blur(6px);
-  background: rgba(15,23,42,.85);
-  border:1px solid rgba(96,165,250,.45);
-  box-shadow:0 0 10px rgba(96,165,250,.25);
-}
-
-/* Card de bienvenida MÁS protagonista */
-.card{
-  background: linear-gradient(
-    160deg,
-    rgba(47,59,99,.95),
-    rgba(33,46,90,.95)
-  );
-}
-
-/* Progreso con brillo */
-.progress > div{
-  box-shadow: 0 0 12px rgba(96,165,250,.6);
-}
-/* =========================
-   ✅ FIX CENTRADO EN MÓVIL
-   ========================= */
-@media (max-width: 768px){
-
-  /* Asegura centrado horizontal real */
-  .container{
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  /* Grid ocupa todo el ancho disponible */
-  .grid{
-    width: 100%;
-    justify-items: stretch;
-  }
-
-  /* Cards centradas y a ancho completo */
-  .card{
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-  }
-}
-/* =========================
-   ✅ FIX TIPOGRAFÍA (WEB + MÓVIL)
-   ========================= */
-
-/* 1) Bloquea la fuente en TODA la app */
-html, body, button, input, select, textarea{
-  font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-/* 2) Escala base correcta */
-html{ font-size: 16px; }
-body{ line-height: 1.45; }
-
-/* 3) Titulares consistentes */
-h2{
-  font-size: 20px;
-  line-height: 1.25;
-}
-@media (max-width: 768px){
-  h2{ font-size: 18px; }
-}
-
-/* 4) Texto normal legible */
-.note, p, label{
-  font-size: 14px;
-}
-@media (max-width: 768px){
-  .note, p, label{ font-size: 14px; }
-}
-
-/* 5) Botones con texto claro */
-button{
-  font-size: 14px;
-  line-height: 1.1;
-}
-@media (max-width: 768px){
-  button{ font-size: 15px; }
-}
-
-/* 6) Inputs sin zoom raro en iOS */
-input, select, textarea{
-  font-size: 16px;
-}
-``
-/* =========================
-   ✅ TIPOGRAFÍA DEFINITIVA
-   ========================= */
-html, body, button, input, select, textarea{
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body{
-  line-height: 1.5;
-}
-
-h1, h2{
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.note{
-  font-weight: 500;
-}
-/* ===== FIX HEADER EN MÓVIL ===== */
-@media (max-width: 768px){
-
-  .nav{
-    flex-wrap: nowrap;              /* ❌ no columnas */
-    overflow-x: auto;               /* ✅ scroll si no cabe */
-    width: 100%;
-    padding-bottom: 4px;
-  }
-
-  .nav button{
-    white-space: nowrap;            /* no partir texto */
-    flex-shrink: 0;
-  }
-}
-/* ===== FIX CONTENIDO MOBILE ===== */
-@media (max-width: 768px){
-
-  .container{
-    max-width: 100%;
-  }
-
-  .card{
-    max-width: 100%;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-  }
-
-  .card h2,
-  .card p{
-    max-width: 100%;
-  }
-}
-/* ===== FIX DEFINITIVO ANCHO MOBILE ===== */
-@media (max-width: 768px){
-
-  body{
-    overflow-x: hidden;
-  }
-
-  .container{
-    width: 100%;
-    max-width: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .grid{
-    width: 100%;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .card{
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-}
-/* ===== HEADER MOBILE NAV REAL ===== */
-@media (max-width: 768px){
-
+  /* Header: nav scrolleable horizontal, nunca en columna infinita */
   .topbar{
+    flex-direction: column;
     align-items: flex-start;
   }
 
   .nav{
-    width: 100%;
-    display: flex;
+    width:100%;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 6px;
-  }
-
-  .nav::-webkit-scrollbar{
-    height: 4px;
-  }
-
-  .nav::-webkit-scrollbar-thumb{
-    background: rgba(255,255,255,.25);
-    border-radius: 2px;
+    overflow-x:auto;
+    padding-bottom:6px;
+    gap:8px;
   }
 
   .nav button{
-    flex-shrink: 0;
-    white-space: nowrap;
-    font-size: 13px;
-    padding: 8px 12px;
-  }
-}
-/* ===== FIX DEFINITIVO LAYOUT MÓVIL ===== */
-@media (max-width: 768px){
-
-  /* Olvida el grid desktop */
-  .grid{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    flex-shrink:0;
+    white-space:nowrap;
+    font-size:13px;
+    padding:8px 12px;
   }
 
-  /* Todas las cards a ancho completo */
-  .col4,
-  .col6,
-  .col8,
-  .col12{
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .card{
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-  }
-
+  /* Una columna real */
   .container{
-    padding-left: 16px;
-    padding-right: 16px;
+    max-width:100%;
+    padding-left:16px;
+    padding-right:16px;
   }
 
-  body{
-    overflow-x: hidden;
-  }
-}
-/* ===== HEADER MOBILE USABLE ===== */
-@media (max-width: 768px){
-
-  .nav{
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 8px;
-    width: 100%;
-  }
-
-  .nav button{
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-}
-/* =========================
-   ✅ MOBILE REAL (STOP DESKTOP)
-   ========================= */
-@media (max-width: 900px){
-
-  /* Olvidar grid y columnas */
   .grid{
-    display: block !important;
+    grid-template-columns: 1fr;
   }
 
-  .col4,
-  .col6,
-  .col8,
-  .col12{
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
+  .col4, .col6, .col8, .col12{
+    grid-column: span 1;
   }
 
-  /* Cards simples, centradas */
+  /* Cards no “gigantes”, centradas y sin desbordes */
   .card{
-    width: 100% !important;
-    max-width: 520px;     /* 🔑 evita sensación de bloque monstruo */
-    margin: 0 auto 16px;
-    padding: 16px;
+    max-width:520px;
+    margin:0 auto 16px;
+    width:100%;
+    padding:16px;
   }
 
-  /* Container centrado */
-  .container{
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  /* Formulario mobile-friendly */
-  input,
-  select,
-  textarea{
-    width: 100%;
-  }
-
+  /* Botones cómodos */
   .actions{
     flex-direction: column;
   }
+  .actions button{
+    width:100%;
+  }
 
-  button{
-    width: 100%;
+  /* Inputs sin zoom iOS */
+  input, select, textarea{
+    font-size:16px;
   }
 }
 ``
-/* 🔴 PRUEBA: FORZAR MODO MÓVIL */
-.grid{
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.col4,
-.col6,
-.col8,
-.col12{
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.card{
-  max-width: 520px;
-  margin: 0 auto 16px;
-}
