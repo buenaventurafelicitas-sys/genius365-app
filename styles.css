@@ -1,12 +1,13 @@
 :root{
-  --bg:#0b1530;   /* antes: muy oscuro */
-  --bg2:#060b1f;
+  /* FONDO AZUL – +4 TONOS TOTAL DESDE EL ORIGINAL */
+  --bg:#152458;
+  --bg2:#0d1736;
 
   --text:#e5e7eb;
-  --muted:#94a3b8;
+  --muted:#a3b1cc;
 
-  --card:rgba(11,18,32,.92);
-  --line:rgba(255,255,255,.12);
+  --card:rgba(14,22,46,.92);
+  --line:rgba(255,255,255,.14);
 
   --accent:#60a5fa;
   --accent2:#22c55e;
@@ -27,8 +28,8 @@ html, body{
   min-height:100vh;
   color:var(--text);
   background:
-    radial-gradient(circle at 20% 30%, rgba(120,180,255,.35), transparent 55%),
-    radial-gradient(circle at 80% 70%, rgba(160,130,255,.32), transparent 60%),
+    radial-gradient(circle at 18% 28%, rgba(150,200,255,.45), transparent 55%),
+    radial-gradient(circle at 82% 68%, rgba(190,160,255,.42), transparent 60%),
     linear-gradient(180deg,var(--bg),var(--bg2));
 }
 
@@ -37,7 +38,7 @@ html, body{
    ========================= */
 .topbar{
   padding:14px 18px;
-  background:rgba(11,18,32,.88);
+  background:rgba(14,22,46,.82);
   backdrop-filter: blur(10px);
   border-bottom:1px solid var(--line);
 
@@ -86,18 +87,22 @@ html, body{
 }
 
 .nav button{
-  background:rgba(15,23,42,.9);
-  border:1px solid rgba(96,165,250,.45);
+  background:rgba(18,28,58,.9);
+  border:1px solid rgba(120,180,255,.55);
   color:var(--text);
   padding:8px 14px;
   border-radius:999px;
   cursor:pointer;
-  box-shadow:0 0 6px rgba(96,165,250,.3);
+  box-shadow:
+    0 0 6px rgba(120,180,255,.45),
+    0 0 14px rgba(120,180,255,.25);
 }
 
 .nav button:hover{
   border-color:var(--accent);
-  box-shadow:0 0 10px rgba(96,165,250,.55);
+  box-shadow:
+    0 0 12px rgba(120,180,255,.75),
+    0 0 22px rgba(120,180,255,.45);
 }
 
 .nav-right .danger{
@@ -116,7 +121,7 @@ html, body{
 .container{
   max-width:1000px;
   margin:0 auto;
-  padding:20px;
+  padding:22px;
 }
 
 /* =========================
@@ -125,9 +130,11 @@ html, body{
 .card{
   background:var(--card);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 12px 32px rgba(0,0,0,.45);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.04);
 }
 
 /* =========================
@@ -136,7 +143,7 @@ html, body{
 .note{
   color:var(--muted);
   font-size:12px;
-  line-height:1.4;
+  line-height:1.5;
 }
 
 /* =========================
@@ -152,14 +159,14 @@ label{
 input, select, textarea{
   width:100%;
   padding:12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(15,23,42,.9);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(18,28,58,.9);
   color:var(--text);
 }
 
 textarea{
-  min-height:100px;
+  min-height:110px;
   resize:vertical;
 }
 
@@ -168,16 +175,16 @@ textarea{
    ========================= */
 .actions{
   display:flex;
-  gap:10px;
-  margin-top:12px;
+  gap:12px;
+  margin-top:14px;
   flex-wrap:wrap;
 }
 
 button{
-  background:rgba(15,23,42,.92);
-  border:1px solid rgba(255,255,255,.14);
+  background:rgba(18,28,58,.92);
+  border:1px solid rgba(255,255,255,.18);
   color:var(--text);
-  padding:10px 16px;
+  padding:10px 18px;
   border-radius:999px;
   cursor:pointer;
 }
@@ -185,16 +192,16 @@ button{
 button.primary{
   background:linear-gradient(90deg,var(--accent2),var(--accent));
   border:none;
-  color:#020617;
+  color:#051028;
   font-weight:700;
   box-shadow:
-    0 0 12px rgba(96,165,250,.6),
-    0 0 20px rgba(34,197,94,.35);
+    0 0 14px rgba(96,165,250,.75),
+    0 0 26px rgba(34,197,94,.45);
 }
 
 button.secondary{
-  background:rgba(15,23,42,.92);
-  border:1px solid rgba(96,165,250,.35);
+  background:rgba(18,28,58,.92);
+  border:1px solid rgba(120,180,255,.45);
   color:var(--text);
 }
 
