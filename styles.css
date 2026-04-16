@@ -294,3 +294,69 @@ button.secondary{
 
   input,select,textarea{ font-size:16px; }
 }
+/* =========================
+   BELTS – formato FINAL (como querías)
+   ========================= */
+
+.belts-list{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+.belt-row{
+  padding:4px 0;
+}
+
+.belt-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  font-size:15px;
+}
+
+.belt-title{
+  font-weight:800;
+}
+
+/* Bolitas */
+.belt-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+/* Texto debajo */
+.belt-text{
+  margin:6px 0 0 20px;
+  font-size:14px;
+  font-weight:500;
+  color:var(--text);
+}
+
+/* Colores */
+.belt-white .belt-dot{
+  background:#f8fafc;
+  border:1px solid #cbd5f5;
+}
+.belt-white .belt-title{ color:#f8fafc; }
+
+.belt-yellow .belt-dot{
+  background:#facc15;
+}
+.belt-yellow .belt-title{ color:#facc15; }
+
+.belt-green .belt-dot{
+  background:#22c55e;
+}
+.belt-green .belt-title{ color:#22c55e; }
+
+.belt-black .belt-dot{
+  background:#020617;
+  border:2px solid #94a3b8; /* aro claro para que se vea */
+}
+.belt-black .belt-title{
+  color:#e5e7eb;
+}
