@@ -1,4 +1,6 @@
 // Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
+// + Cinturones con bolita de color delante
+// + Bolita también en "Mi progreso" (Nivel)
 
 const APP = {
   clientName: "Francisco Aragón",
@@ -21,16 +23,16 @@ const CONFIG = {
 };
 
 const defaultState = {
-  userType: "",
+  userType: "", // "" | "licensed" | "free"
   me: { name:"", role:"", area:"collab", belt:"white" },
   evidence: {
     trainingDone:false,
     elearningDone:false,
     examPassed:false,
-    usecase:{ idea:"", videoUrl:"", status:"draft" }
+    usecase:{ idea:"", videoUrl:"", status:"draft" } // draft|submitted|approved|rejected
   },
-  licenseRequests: [],
-  caseInbox: []
+  licenseRequests: [], // [{id,name,role,why,tasks,impact,status}]
+  caseInbox: []        // [{id,userName,area,idea,videoUrl,status}]
 };
 
 function load(){
@@ -42,17 +44,18 @@ function save(){ localStorage.setItem(APP.storageKey, JSON.stringify(state)); }
 let state = load();
 const app = document.getElementById("app");
 
-// Header
+// Header titles (si existen)
 const titleEl = document.getElementById("appTitle");
 const subEl = document.getElementById("appSubtitle");
 if(titleEl) titleEl.innerText = `Genius365 — ${APP.clientName}`;
 if(subEl) subEl.innerText = `Cinturones (licensed) + Solicitud de licencia (Copilot Chat Free)`;
 
-// Routing
+// Nav routing
 document.querySelectorAll("[data-route]").forEach(btn=>{
   btn.addEventListener("click", ()=>render(btn.dataset.route));
 });
 
+// Reset
 const resetBtn = document.getElementById("resetBtn");
 if(resetBtn){
   resetBtn.addEventListener("click", ()=>{
@@ -62,6 +65,7 @@ if(resetBtn){
   });
 }
 
+// Start
 render("home");
 
 function render(route){
@@ -72,6 +76,7 @@ function render(route){
   (views[route] || home)();
 }
 
+// ---------- Screens ----------
 function onboarding(){
   app.innerHTML = `
     <div class="grid">
@@ -80,8 +85,10 @@ function onboarding(){
         <p class="note">Elige tu situación para ver el recorrido correcto.</p>
         <div class="actions">
           <button class="primary" id="btnLicensed">Tengo licencia de M365 Copilot</button>
-          <button class="secondary" id="btnFree">Uso Copilot Chat (Free)</button>
+          <button class="secondary" id="btnFree">Uso Copilot Chat (Free) y quiero solicitar licencia</button>
         </div>
+        <hr/>
+        <p class="note">Si no ves cambios, pulsa <b>Reset</b> arriba (borra la memoria del navegador).</p>
       </section>
     </div>
   `;
@@ -99,7 +106,10 @@ function home(){
       <div class="grid">
         <section class="card col12">
           <h2>Copilot Chat (Free)</h2>
-          <button class="primary" id="goLicense">Solicitar licencia</button>
+          <p class="note">Tu camino aquí es <b>Solicitar licencia</b>.</p>
+          <div class="actions">
+            <button class="primary" id="goLicense">Ir a Solicitar licencia</button>
+          </div>
         </section>
       </div>
     `;
@@ -115,18 +125,19 @@ function home(){
       <section class="card col8">
         <h2>Mi progreso</h2>
 
-        <div class="badge">Área: <b>${area.name}</b></div>
+        <div class="badge">Área: <b>${escapeHtml(area.name)}</b></div>
 
+        <!-- ✅ Nivel con bolita + negrita -->
         <div class="badge">
           Nivel:
           <span class="progress-level belt-${belt.id}">
             <span class="belt-dot"></span>
-            <span class="belt-title">${belt.name}</span>
+            <span class="belt-title">${escapeHtml(belt.name)}</span>
           </span>
         </div>
 
         <div class="progress"><div style="width:${progressPct()}%"></div></div>
-        <p class="note">Siguiente paso: ${nextStepText()}</p>
+        <p class="note">Siguiente paso: ${escapeHtml(nextStepText())}</p>
 
         <div class="actions">
           <button class="primary" id="goEvidence">Evidencias</button>
@@ -136,51 +147,254 @@ function home(){
 
       <section class="card col4">
         <h2>Mi perfil</h2>
-        <input id="name" value="${state.me.name}" placeholder="Nombre"/>
-        <input id="role" value="${state.me.role}" placeholder="Puesto"/>
+        <label>Nombre</label>
+        <input id="name" value="${escapeHtml(state.me.name)}" placeholder="Nombre Apellido"/>
+        <label>Puesto</label>
+        <input id="role" value="${escapeHtml(state.me.role)}" placeholder="Puesto"/>
+        <label>Área</label>
         <select id="area">
           ${CONFIG.areas.map(a=>`<option value="${a.id}" ${a.id===state.me.area?"selected":""}>${a.name}</option>`).join("")}
         </select>
-        <button class="primary" id="saveMe">Guardar</button>
+        <div class="actions">
+          <button class="primary" id="saveMe">Guardar</button>
+        </div>
       </section>
+
+      <!-- ❌ BLOQUE "Retos (quests) sugeridos" ELIMINADO -->
     </div>
   `;
 
   document.getElementById("goEvidence").onclick = ()=>render("evidence");
   document.getElementById("goBelts").onclick = ()=>render("belts");
   document.getElementById("saveMe").onclick = ()=>{
-    state.me.name = document.getElementById("name").value;
-    state.me.role = document.getElementById("role").value;
+    state.me.name = document.getElementById("name").value.trim();
+    state.me.role = document.getElementById("role").value.trim();
     state.me.area = document.getElementById("area").value;
     save(); render("home");
   };
 }
 
+/* ✅ Cinturones como el screenshot: bolita + título en negrita + texto debajo */
 function belts(){
-  app.innerHTML = `<div class="card col12"><h2>Cinturones</h2></div>`;
+  if(state.userType !== "licensed"){
+    return messageOnly("Cinturones", "Solo para usuarios con licencia (licensed).");
+  }
+
+  const items = [
+    { id:"white",  title:"Cinturón Blanco",  req:"Inicio. Asiste a una formación para pasar a Amarillo." },
+    { id:"yellow", title:"Cinturón Amarillo",req:"Formación registrada. Completa e-learning + examen para Verde." },
+    { id:"green",  title:"Cinturón Verde",   req:"Envía un caso real (idea + vídeo) para revisión Genius365." },
+    { id:"black",  title:"Cinturón Negro (Champion)", req:"Caso aprobado. Eres Champion." }
+  ];
+
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>Ruta de cinturones</h2>
+
+        <div class="belts-list">
+          ${items.map(x=>`
+            <div class="belt-row belt-${x.id}">
+              <div class="belt-header">
+                <span class="belt-dot"></span>
+                <span class="belt-title">${escapeHtml(x.title)}</span>
+              </div>
+              <p class="belt-text">${escapeHtml(x.req)}</p>
+            </div>
+          `).join("")}
+        </div>
+
+      </section>
+    </div>
+  `;
 }
 
 function evidence(){
-  app.innerHTML = `<div class="card col12"><h2>Evidencias</h2></div>`;
+  if(state.userType !== "licensed"){
+    return messageOnly("Evidencias", "Solo para usuarios con licencia (licensed).");
+  }
+
+  const e = state.evidence;
+
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col6">
+        <h2>Amarillo (Formación)</h2>
+        <p class="note">Blanco → Amarillo: confirma asistencia.</p>
+        <div class="actions">
+          <button class="primary" id="btnTraining" ${state.me.belt==="white" ? "" : "disabled"}>Confirmar asistencia</button>
+        </div>
+        <p class="note">Estado: ${e.trainingDone ? "✅ Registrado" : "⏳ Pendiente"}</p>
+      </section>
+
+      <section class="card col6">
+        <h2>Verde (E-learning + Examen)</h2>
+        <p class="note">Amarillo → Verde: e-learning + examen.</p>
+        <label><input type="checkbox" id="elearn" ${e.elearningDone?"checked":""}/> E-learning completado</label>
+        <label><input type="checkbox" id="exam" ${e.examPassed?"checked":""}/> Examen aprobado</label>
+        <div class="actions">
+          <button class="primary" id="btnGreen" ${state.me.belt==="yellow" ? "" : "disabled"}>Subir a Verde</button>
+        </div>
+      </section>
+
+      <section class="card col12">
+        <h2>Negro (Caso + validación Genius365)</h2>
+        <p class="note">Solo desde Verde. Envía idea + vídeo y queda en revisión.</p>
+        <label>Idea</label>
+        <textarea id="idea">${escapeHtml(e.usecase.idea)}</textarea>
+        <label>Link vídeo</label>
+        <input id="video" value="${escapeHtml(e.usecase.videoUrl)}" placeholder="https://..."/>
+        <div class="actions">
+          <button class="secondary" id="btnSubmit" ${state.me.belt==="green" ? "" : "disabled"}>Enviar a revisión</button>
+        </div>
+        <p class="note">Estado del caso: <b>${escapeHtml(e.usecase.status)}</b></p>
+      </section>
+    </div>
+  `;
+
+  document.getElementById("btnTraining").onclick = ()=>{
+    state.evidence.trainingDone = true;
+    state.me.belt = "yellow";
+    save(); render("evidence");
+  };
+
+  document.getElementById("btnGreen").onclick = ()=>{
+    state.evidence.elearningDone = document.getElementById("elearn").checked;
+    state.evidence.examPassed = document.getElementById("exam").checked;
+    if(state.evidence.elearningDone && state.evidence.examPassed){
+      state.me.belt = "green";
+      save(); render("evidence");
+    } else {
+      alert("Marca e-learning + examen para pasar a Verde.");
+    }
+  };
+
+  document.getElementById("btnSubmit").onclick = ()=>{
+    const idea = document.getElementById("idea").value.trim();
+    const videoUrl = document.getElementById("video").value.trim();
+    if(!idea || !videoUrl) return alert("Completa idea + vídeo.");
+
+    state.evidence.usecase.idea = idea;
+    state.evidence.usecase.videoUrl = videoUrl;
+    state.evidence.usecase.status = "submitted";
+
+    state.caseInbox.unshift({
+      id: makeId(),
+      userName: state.me.name || "Usuario",
+      area: state.me.area,
+      idea, videoUrl,
+      status: "submitted"
+    });
+
+    save(); alert("Caso enviado. Pendiente de revisión."); render("evidence");
+  };
 }
 
 function license(){
-  app.innerHTML = `<div class="card col12"><h2>Solicitud de licencia</h2></div>`;
+  if(state.userType !== "free"){
+    return messageOnly("Solicitud de licencia", "Esta sección es para usuarios de Copilot Chat (Free).");
+  }
+
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>Solicitar licencia de M365 Copilot</h2>
+        <p class="note">Describe por qué la necesitas (vienes de Copilot Chat Free).</p>
+
+        <label>Nombre</label>
+        <input id="n" placeholder="Nombre Apellido"/>
+        <label>Puesto</label>
+        <input id="r" placeholder="Puesto"/>
+
+        <label>Justificación</label>
+        <textarea id="why"></textarea>
+
+        <label>Tareas a mejorar</label>
+        <textarea id="tasks"></textarea>
+
+        <label>Impacto esperado</label>
+        <select id="impact">
+          <option value="">Selecciona…</option>
+          <option>Ahorro de tiempo</option>
+          <option>Mejora de calidad</option>
+          <option>Reducción de errores</option>
+          <option>Automatización / estandarización</option>
+        </select>
+
+        <div class="actions">
+          <button class="primary" id="sendReq">Enviar solicitud</button>
+        </div>
+
+        <p class="note">Solicitudes enviadas (en este navegador): <b>${state.licenseRequests.length}</b></p>
+      </section>
+    </div>
+  `;
+
+  document.getElementById("sendReq").onclick = ()=>{
+    const req = {
+      id: makeId(),
+      name: document.getElementById("n").value.trim(),
+      role: document.getElementById("r").value.trim(),
+      why: document.getElementById("why").value.trim(),
+      tasks: document.getElementById("tasks").value.trim(),
+      impact: document.getElementById("impact").value,
+      status: "pending"
+    };
+    if(!req.name || !req.role || !req.why) return alert("Completa Nombre, Puesto y Justificación.");
+    state.licenseRequests.unshift(req);
+    save(); alert("Solicitud enviada."); render("license");
+  };
 }
 
 function admin(){
-  app.innerHTML = `<div class="card col12"><h2>Admin</h2></div>`;
+  // MVP: mantenemos admin simple para no romper nada hoy
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>Admin</h2>
+        <p class="note">MVP local (pendiente de reactivar tablas con calma).</p>
+        <p class="note">Casos enviados: <b>${state.caseInbox.length}</b> · Solicitudes: <b>${state.licenseRequests.length}</b></p>
+      </section>
+    </div>
+  `;
 }
 
-function areaObj(id){ return CONFIG.areas.find(a=>a.id===id); }
-function beltObj(id){ return CONFIG.belts.find(b=>b.id===id); }
+// ---------- Helpers ----------
+function messageOnly(title, text){
+  app.innerHTML = `
+    <div class="grid">
+      <section class="card col12">
+        <h2>${escapeHtml(title)}</h2>
+        <p class="note">${escapeHtml(text)}</p>
+      </section>
+    </div>
+  `;
+}
+
+function areaObj(id){ return CONFIG.areas.find(a=>a.id===id) || CONFIG.areas[0]; }
+function beltObj(id){ return CONFIG.belts.find(b=>b.id===id) || CONFIG.belts[0]; }
 
 function progressPct(){
   const order = ["white","yellow","green","black"];
-  return order.indexOf(state.me.belt) * 33;
+  const idx = order.indexOf(state.me.belt);
+  return Math.max(0, Math.min(100, idx * 33));
 }
 
 function nextStepText(){
-  return "Completa tu siguiente paso";
+  if(state.me.belt==="white") return "Registrar asistencia (QR) para pasar a Amarillo.";
+  if(state.me.belt==="yellow") return "Completar e-learning y examen para pasar a Verde.";
+  if(state.me.belt==="green" && state.evidence.usecase.status!=="submitted") return "Enviar caso para revisión.";
+  if(state.me.belt==="green" && state.evidence.usecase.status==="submitted") return "Esperar validación Genius365.";
+  if(state.me.belt==="black") return "Compartir y acompañar a otros.";
+  return "-";
 }
-// actualización
+
+function escapeHtml(str){
+  return (str || "").toString()
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function makeId(){
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
+}
