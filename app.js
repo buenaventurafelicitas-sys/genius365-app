@@ -1,4 +1,4 @@
- // Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
+// Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
 // + Cinturones con bolita de color delante
 // + Bolita también en "Mi progreso" (Nivel)
 
@@ -158,12 +158,6 @@ function home(){
         <div class="actions">
           <button class="primary" id="saveMe">Guardar</button>
         </div>
-      </section>
-
-      <section class="card col12">
-        <h2>Retos (quests) sugeridos</h2>
-        <p class="note">Inspirados en tu área: <b>${escapeHtml(area.examples)}</b></p>
-        ${questsForArea(state.me.area).map(q=>`<div class="badge">${escapeHtml(q)}</div>`).join(" ")}
       </section>
     </div>
   `;
