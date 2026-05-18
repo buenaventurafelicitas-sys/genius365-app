@@ -29,10 +29,10 @@ const defaultState = {
     trainingDone:false,
     elearningDone:false,
     examPassed:false,
-    usecase:{ idea:"", videoUrl:"", status:"draft" } // draft|submitted|approved|rejected
+    usecase:{ idea:"", videoUrl:"", status:"draft" }
   },
-  licenseRequests: [], // [{id,name,role,why,tasks,impact,status}]
-  caseInbox: []        // [{id,userName,area,idea,videoUrl,status}]
+  licenseRequests: [],
+  caseInbox: []
 };
 
 function load(){
@@ -44,18 +44,15 @@ function save(){ localStorage.setItem(APP.storageKey, JSON.stringify(state)); }
 let state = load();
 const app = document.getElementById("app");
 
-// Header titles (si existen)
 const titleEl = document.getElementById("appTitle");
 const subEl = document.getElementById("appSubtitle");
 if(titleEl) titleEl.innerText = `Genius365 — ${APP.clientName}`;
 if(subEl) subEl.innerText = `Cinturones (licensed) + Solicitud de licencia (Copilot Chat Free)`;
 
-// Nav routing
 document.querySelectorAll("[data-route]").forEach(btn=>{
   btn.addEventListener("click", ()=>render(btn.dataset.route));
 });
 
-// Reset
 const resetBtn = document.getElementById("resetBtn");
 if(resetBtn){
   resetBtn.addEventListener("click", ()=>{
@@ -65,7 +62,6 @@ if(resetBtn){
   });
 }
 
-// Start
 render("home");
 
 function render(route){
@@ -127,7 +123,6 @@ function home(){
 
         <div class="badge">Área: <b>${escapeHtml(area.name)}</b></div>
 
-        <!-- ✅ Nivel con bolita + negrita -->
         <div class="badge">
           Nivel:
           <span class="progress-level belt-${belt.id}">
@@ -172,34 +167,164 @@ function home(){
   };
 }
 
-/* ✅ Cinturones como el screenshot: bolita + título en negrita + texto debajo */
 function belts(){
   if(state.userType !== "licensed"){
     return messageOnly("Cinturones", "Solo para usuarios con licencia (licensed).");
   }
 
-  const items = [
-    { id:"white",  title:"Cinturón Blanco",  req:"Inicio. Asiste a una formación para pasar a Amarillo." },
-    { id:"yellow", title:"Cinturón Amarillo",req:"Formación registrada. Completa e-learning + examen para Verde." },
-    { id:"green",  title:"Cinturón Verde",   req:"Envía un caso real (idea + vídeo) para revisión Genius365." },
-    { id:"black",  title:"Cinturón Negro (Champion)", req:"Caso aprobado. Eres Champion." }
-  ];
-
   app.innerHTML = `
     <div class="grid">
       <section class="card col12">
-        <h2>Ruta de cinturones</h2>
 
-        <div class="belts-list">
-          ${items.map(x=>`
-            <div class="belt-row belt-${x.id}">
-              <div class="belt-header">
-                <span class="belt-dot"></span>
-                <span class="belt-title">${escapeHtml(x.title)}</span>
-              </div>
-              <p class="belt-text">${escapeHtml(x.req)}</p>
-            </div>
-          `).join("")}
+        <style>
+          @keyframes pulse-white  { 0%,100%{opacity:.5} 50%{opacity:1} }
+          @keyframes pulse-yellow { 0%,100%{opacity:.4} 50%{opacity:.9} }
+          @keyframes pulse-green  { 0%,100%{opacity:.4} 50%{opacity:.9} }
+          @keyframes pulse-black  { 0%,100%{opacity:.3} 50%{opacity:.7} }
+          .dot-w { animation: pulse-white  1.8s ease-in-out infinite; }
+          .dot-y { animation: pulse-yellow 2.1s ease-in-out infinite; }
+          .dot-g { animation: pulse-green  2.4s ease-in-out infinite; }
+          .dot-b { animation: pulse-black  2.8s ease-in-out infinite; }
+          .belt-row-ft {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            align-items: center;
+            gap: 0 20px;
+            padding: 18px 0;
+            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+          }
+          .belt-row-ft:last-child { border-bottom: none; }
+          .belt-icon-ft {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+          }
+          .belt-connector {
+            width: 1px;
+            height: 20px;
+            background: rgba(0,0,0,0.15);
+          }
+          .belt-row-ft:last-child .belt-connector { display: none; }
+          .belt-step-num {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin-bottom: 2px;
+          }
+          .belt-title-ft {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 3px;
+          }
+          .belt-desc-ft {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 0;
+          }
+          .belt-tag-ft {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 0.5px solid;
+            margin-top: 6px;
+          }
+          .belts-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+          }
+          .belts-header-label {
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #999;
+            font-weight: 500;
+          }
+        </style>
+
+        <div class="belts-header">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <polygon points="9,1 11.5,6.5 17.5,7.2 13,11.5 14.3,17.5 9,14.5 3.7,17.5 5,11.5 0.5,7.2 6.5,6.5"
+              fill="none" stroke="#aaa" stroke-width="0.8"/>
+          </svg>
+          <span class="belts-header-label">Ruta de certificación — Genius365</span>
+        </div>
+
+        <!-- BLANCO -->
+        <div class="belt-row-ft">
+          <div class="belt-icon-ft">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <polygon points="22,4 38,13 38,31 22,40 6,31 6,13" fill="none" stroke="#B4B2A9" stroke-width="1"/>
+              <polygon points="22,10 33,16.5 33,27.5 22,34 11,27.5 11,16.5" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+              <circle cx="22" cy="22" r="4" fill="#B4B2A9" class="dot-w"/>
+            </svg>
+            <div class="belt-connector"></div>
+          </div>
+          <div>
+            <div class="belt-step-num">NIVEL 01</div>
+            <div class="belt-title-ft">Cinturón Blanco</div>
+            <div class="belt-desc-ft">Punto de entrada. Asiste a una sesión formativa presencial para avanzar.</div>
+            <span class="belt-tag-ft" style="color:#888780; border-color:#B4B2A9; background:#F1EFE8;">Asistencia QR</span>
+          </div>
+        </div>
+
+        <!-- AMARILLO -->
+        <div class="belt-row-ft">
+          <div class="belt-icon-ft">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <polygon points="22,4 38,13 38,31 22,40 6,31 6,13" fill="none" stroke="#EF9F27" stroke-width="1"/>
+              <polygon points="22,10 33,16.5 33,27.5 22,34 11,27.5 11,16.5" fill="#FAEEDA" stroke="#EF9F27" stroke-width="0.5"/>
+              <circle cx="22" cy="22" r="4" fill="#EF9F27" class="dot-y"/>
+            </svg>
+            <div class="belt-connector"></div>
+          </div>
+          <div>
+            <div class="belt-step-num">NIVEL 02</div>
+            <div class="belt-title-ft">Cinturón Amarillo</div>
+            <div class="belt-desc-ft">Formación registrada. Completa el e-learning y supera el examen para continuar.</div>
+            <span class="belt-tag-ft" style="color:#854F0B; border-color:#EF9F27; background:#FAEEDA;">E-learning + examen</span>
+          </div>
+        </div>
+
+        <!-- VERDE -->
+        <div class="belt-row-ft">
+          <div class="belt-icon-ft">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <polygon points="22,4 38,13 38,31 22,40 6,31 6,13" fill="none" stroke="#34d399" stroke-width="1"/>
+              <polygon points="22,10 33,16.5 33,27.5 22,34 11,27.5 11,16.5" fill="#EAF3DE" stroke="#34d399" stroke-width="0.5"/>
+              <circle cx="22" cy="22" r="4" fill="#34d399" class="dot-g"/>
+            </svg>
+            <div class="belt-connector"></div>
+          </div>
+          <div>
+            <div class="belt-step-num">NIVEL 03</div>
+            <div class="belt-title-ft">Cinturón Verde</div>
+            <div class="belt-desc-ft">Envía un caso real documentado con idea y vídeo para revisión del equipo Genius365.</div>
+            <span class="belt-tag-ft" style="color:#3B6D11; border-color:#34d399; background:#EAF3DE;">Caso real + vídeo</span>
+          </div>
+        </div>
+
+        <!-- NEGRO -->
+        <div class="belt-row-ft">
+          <div class="belt-icon-ft">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <polygon points="22,4 38,13 38,31 22,40 6,31 6,13" fill="none" stroke="#444441" stroke-width="1"/>
+              <polygon points="22,10 33,16.5 33,27.5 22,34 11,27.5 11,16.5" fill="#2C2C2A" stroke="#444441" stroke-width="0.5"/>
+              <circle cx="22" cy="22" r="4" fill="#888780" class="dot-b"/>
+            </svg>
+          </div>
+          <div>
+            <div class="belt-step-num">NIVEL 04</div>
+            <div class="belt-title-ft">Cinturón Negro <span style="color:#aaa; font-weight:400; font-size:13px;">— Champion</span></div>
+            <div class="belt-desc-ft">Caso validado por Genius365. Eres referente interno y acompañas a otros en el recorrido.</div>
+            <span class="belt-tag-ft" style="color:#D3D1C7; border-color:#444441; background:#2C2C2A;">Validación Genius365</span>
+          </div>
         </div>
 
       </section>
@@ -345,7 +470,6 @@ function license(){
 }
 
 function admin(){
-  // MVP: mantenemos admin simple para no romper nada hoy
   app.innerHTML = `
     <div class="grid">
       <section class="card col12">
@@ -385,16 +509,6 @@ function nextStepText(){
   if(state.me.belt==="green" && state.evidence.usecase.status==="submitted") return "Esperar validación Genius365.";
   if(state.me.belt==="black") return "Compartir y acompañar a otros.";
   return "-";
-}
-
-function questsForArea(areaId){
-  const map = {
-    collab: ["Comparar dos documentos", "Resumir un documento largo", "Crear plantilla de propuesta"],
-    comm:   ["Resumen de reunión", "Redactar correo ejecutivo", "Traducir comunicado"],
-    prod:   ["Análisis de tabla", "Lista de acciones", "Plan semanal"],
-    auto:   ["Automatizar reporte", "Idea de agente", "Checklist validación"]
-  };
-  return map[areaId] || ["Definir tu primer caso real"];
 }
 
 function escapeHtml(str){
