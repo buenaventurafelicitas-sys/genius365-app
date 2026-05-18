@@ -183,3 +183,4 @@ function progressPct(){
 function nextStepText(){
   return "Completa tu siguiente paso";
 }
+// actualización
