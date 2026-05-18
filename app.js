@@ -1,4 +1,4 @@
-// Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
+ // Genius365 - MVP estable (2 caminos + cinturones + licencia + admin)
 // + Cinturones con bolita de color delante
 // + Bolita también en "Mi progreso" (Nivel)
 
@@ -160,7 +160,11 @@ function home(){
         </div>
       </section>
 
-      <!-- ❌ BLOQUE "Retos (quests) sugeridos" ELIMINADO -->
+      <section class="card col12">
+        <h2>Retos (quests) sugeridos</h2>
+        <p class="note">Inspirados en tu área: <b>${escapeHtml(area.examples)}</b></p>
+        ${questsForArea(state.me.area).map(q=>`<div class="badge">${escapeHtml(q)}</div>`).join(" ")}
+      </section>
     </div>
   `;
 
@@ -387,6 +391,16 @@ function nextStepText(){
   if(state.me.belt==="green" && state.evidence.usecase.status==="submitted") return "Esperar validación Genius365.";
   if(state.me.belt==="black") return "Compartir y acompañar a otros.";
   return "-";
+}
+
+function questsForArea(areaId){
+  const map = {
+    collab: ["Comparar dos documentos", "Resumir un documento largo", "Crear plantilla de propuesta"],
+    comm:   ["Resumen de reunión", "Redactar correo ejecutivo", "Traducir comunicado"],
+    prod:   ["Análisis de tabla", "Lista de acciones", "Plan semanal"],
+    auto:   ["Automatizar reporte", "Idea de agente", "Checklist validación"]
+  };
+  return map[areaId] || ["Definir tu primer caso real"];
 }
 
 function escapeHtml(str){
