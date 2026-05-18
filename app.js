@@ -202,7 +202,7 @@ function belts(){
           .bhead-lbl { font-size:10px; letter-spacing:0.16em; font-weight:700; opacity:0.4; color:#fff; }
         </style>
 
-        <div style="background:#0a0a14; border-radius:inherit; color:#fff;">
+        <div style="background:#020b2e; border-radius:inherit; color:#fff;">
 
           <div class="bhead">
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
