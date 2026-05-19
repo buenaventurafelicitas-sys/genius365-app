@@ -57,7 +57,6 @@ const BELT_COLORS = {
   white:"#e5e7eb", yellow:"#fbbf24", green:"#34d399", black:"#374151"
 };
 
-// Estado por área
 function defaultAreaState(){
   return { belt:"white", trainingDone:false, elearningDone:false, examPassed:false, usecase:{ idea:"", videoUrl:"", status:"draft" } };
 }
@@ -65,7 +64,7 @@ function defaultAreaState(){
 const defaultState = {
   userType: "",
   registered: false,
-  me: { name:"", surname:"", department:"", role:"" },
+  me: { name:"", surname:"", department:"", departmentOther:"", role:"", roleOther:"" },
   activeArea: "collab",
   areas: {
     collab: defaultAreaState(),
@@ -119,6 +118,10 @@ function areaData(id){ return state.areas[id] || defaultAreaState(); }
 function areaObj(id){ return CONFIG.areas.find(a=>a.id===id) || CONFIG.areas[0]; }
 function beltObj(id){ return CONFIG.belts.find(b=>b.id===id) || CONFIG.belts[0]; }
 
+// Returns the display value for dept/role (resolves "Otro" to the custom text)
+function displayDept(){ return state.me.department === "Otro" ? (state.me.departmentOther || "Otro") : state.me.department; }
+function displayRole(){ return state.me.role === "Otro" ? (state.me.roleOther || "Otro") : state.me.role; }
+
 function progressPct(belt){
   const order = ["white","yellow","green","black"];
   return Math.max(0, Math.min(100, order.indexOf(belt) * 33));
@@ -151,7 +154,6 @@ function getRankingRows(areaId, userName, belt, userPos){
   full.splice(userPos-1, 0, userEntry);
   let display = full.slice(0,5);
   if(!display.find(p=>p.isMe)) display = [...full.slice(0,4), userEntry];
-
   return display.map(p=>{
     const pos  = full.indexOf(p)+1;
     const isMe = !!p.isMe;
@@ -169,6 +171,32 @@ function getRankingRows(areaId, userName, belt, userPos){
         <span style="font-size:11px;opacity:0.5;">${escapeHtml(p.beltName)}</span>
       </div>`;
   }).join("");
+}
+
+// Renders a select + optional "Otro" text input
+// containerId: id of the wrapping div shown/hidden
+function otherFieldHtml(selectId, options, currentValue, otherValue, otherInputId, label){
+  const isOtro = currentValue === "Otro";
+  return `
+    <label>${label}</label>
+    <select id="${selectId}">
+      <option value="">Selecciona…</option>
+      ${options.map(o=>`<option value="${o}" ${currentValue===o?"selected":""}>${o}</option>`).join("")}
+    </select>
+    <div id="${otherInputId}-wrap" style="margin-top:8px;display:${isOtro?"block":"none"};">
+      <input id="${otherInputId}" value="${escapeHtml(otherValue||"")}" placeholder="Especifica…" style="margin-top:0;"/>
+    </div>
+  `;
+}
+
+function wireOtherField(selectId, otherInputId){
+  const sel = document.getElementById(selectId);
+  const wrap = document.getElementById(`${otherInputId}-wrap`);
+  if(sel && wrap){
+    sel.addEventListener("change", ()=>{
+      wrap.style.display = sel.value === "Otro" ? "block" : "none";
+    });
+  }
 }
 
 function escapeHtml(str){
@@ -204,7 +232,7 @@ function onboarding(){
 function registration(){
   app.innerHTML = `
     <div class="grid">
-      <section class="card col12" style="max-width:520px; margin:0 auto;">
+      <section class="card col12" style="max-width:520px;margin:0 auto;">
         <h2>Completa tu perfil</h2>
         <p class="note" style="margin-bottom:20px;">Antes de empezar, cuéntanos quién eres.</p>
 
@@ -214,17 +242,8 @@ function registration(){
         <label>Apellido</label>
         <input id="reg-surname" value="${escapeHtml(state.me.surname||"")}" placeholder="Apellido"/>
 
-        <label>Departamento</label>
-        <select id="reg-dept">
-          <option value="">Selecciona…</option>
-          ${CONFIG.departments.map(d=>`<option value="${d}" ${state.me.department===d?"selected":""}>${d}</option>`).join("")}
-        </select>
-
-        <label>Rol</label>
-        <select id="reg-role">
-          <option value="">Selecciona…</option>
-          ${CONFIG.roles.map(r=>`<option value="${r}" ${state.me.role===r?"selected":""}>${r}</option>`).join("")}
-        </select>
+        ${otherFieldHtml("reg-dept", CONFIG.departments, state.me.department, state.me.departmentOther, "reg-dept-other", "Departamento")}
+        ${otherFieldHtml("reg-role", CONFIG.roles, state.me.role, state.me.roleOther, "reg-role-other", "Rol")}
 
         <div class="actions" style="margin-top:20px;">
           <button class="primary" id="btnRegister">Empezar →</button>
@@ -233,17 +252,28 @@ function registration(){
     </div>
   `;
 
+  wireOtherField("reg-dept", "reg-dept-other");
+  wireOtherField("reg-role", "reg-role-other");
+
   document.getElementById("btnRegister").onclick = ()=>{
     const name    = document.getElementById("reg-name").value.trim();
     const surname = document.getElementById("reg-surname").value.trim();
     const dept    = document.getElementById("reg-dept").value;
+    const deptOther = document.getElementById("reg-dept-other").value.trim();
     const role    = document.getElementById("reg-role").value;
+    const roleOther = document.getElementById("reg-role-other").value.trim();
+
     if(!name || !surname || !dept || !role) return alert("Completa todos los campos para continuar.");
-    state.me.name       = name;
-    state.me.surname    = surname;
-    state.me.department = dept;
-    state.me.role       = role;
-    state.registered    = true;
+    if(dept === "Otro" && !deptOther) return alert("Especifica tu departamento.");
+    if(role === "Otro" && !roleOther) return alert("Especifica tu rol.");
+
+    state.me.name            = name;
+    state.me.surname         = surname;
+    state.me.department      = dept;
+    state.me.departmentOther = deptOther;
+    state.me.role            = role;
+    state.me.roleOther       = roleOther;
+    state.registered         = true;
     save(); render("home");
   };
 }
@@ -277,9 +307,9 @@ function home(){
 
   const barDots = beltOrder.map((b,i)=>{
     let s = "";
-    if(i < beltIdx)       s = `background:#00e676;border-color:#00e676;box-shadow:0 0 6px rgba(0,230,118,0.6);`;
-    else if(i===beltIdx)  s = `background:#fff;border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,0.5);`;
-    else                  s = `background:transparent;border-color:rgba(255,255,255,0.2);`;
+    if(i < beltIdx)      s = `background:#00e676;border-color:#00e676;box-shadow:0 0 6px rgba(0,230,118,0.6);`;
+    else if(i===beltIdx) s = `background:#fff;border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,0.5);`;
+    else                 s = `background:transparent;border-color:rgba(255,255,255,0.2);`;
     return `<div style="width:8px;height:8px;border-radius:50%;border:1.5px solid;${s}"></div>`;
   }).join("");
 
@@ -292,35 +322,27 @@ function home(){
   app.innerHTML = `
     <div class="grid">
 
-      <!-- PERFIL — izquierda -->
+      <!-- PERFIL -->
       <section class="card col4">
         <h2>Mi perfil</h2>
         <div style="margin-bottom:14px;">
           <div style="font-size:18px;font-weight:700;margin-bottom:2px;">${fullName}</div>
-          <div style="font-size:13px;opacity:0.55;">${escapeHtml(state.me.role)} · ${escapeHtml(state.me.department)}</div>
+          <div style="font-size:13px;opacity:0.55;">${escapeHtml(displayRole())} · ${escapeHtml(displayDept())}</div>
         </div>
         <hr style="border-color:rgba(255,255,255,0.08);margin-bottom:14px;"/>
         <label>Nombre</label>
         <input id="name" value="${escapeHtml(state.me.name)}" placeholder="Nombre"/>
         <label>Apellido</label>
         <input id="surname" value="${escapeHtml(state.me.surname||"")}" placeholder="Apellido"/>
-        <label>Departamento</label>
-        <select id="dept">
-          ${CONFIG.departments.map(d=>`<option value="${d}" ${state.me.department===d?"selected":""}>${d}</option>`).join("")}
-        </select>
-        <label>Rol</label>
-        <select id="role">
-          ${CONFIG.roles.map(r=>`<option value="${r}" ${state.me.role===r?"selected":""}>${r}</option>`).join("")}
-        </select>
+        ${otherFieldHtml("dept", CONFIG.departments, state.me.department, state.me.departmentOther, "dept-other", "Departamento")}
+        ${otherFieldHtml("role", CONFIG.roles, state.me.role, state.me.roleOther, "role-other", "Rol")}
         <div class="actions">
           <button class="primary" id="saveMe">Guardar</button>
         </div>
       </section>
 
-      <!-- MI PROGRESO — derecha -->
+      <!-- MI PROGRESO -->
       <section class="card col8">
-
-        <!-- Selector de área -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">Mi progreso</h2>
           <select id="areaSelector" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:8px 14px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">
@@ -328,7 +350,6 @@ function home(){
           </select>
         </div>
 
-        <!-- Chips nivel -->
         <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
           <div style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:10px;padding:8px 14px;">
             <div>
@@ -345,7 +366,6 @@ function home(){
           </div>
         </div>
 
-        <!-- Barra -->
         <div style="margin-bottom:18px;">
           <div style="display:flex;justify-content:space-between;font-size:10px;opacity:0.4;margin-bottom:6px;letter-spacing:0.06em;">
             <span>BLANCO</span><span>AMARILLO</span><span>VERDE</span><span>NEGRO</span>
@@ -356,7 +376,6 @@ function home(){
           <div style="display:flex;justify-content:space-between;margin-top:8px;">${barDots}</div>
         </div>
 
-        <!-- Siguiente paso -->
         <div style="display:flex;align-items:center;gap:10px;background:rgba(0,207,255,0.07);border:1px solid rgba(0,207,255,0.2);border-radius:10px;padding:10px 14px;margin-bottom:18px;">
           <span style="font-size:16px;flex-shrink:0;">→</span>
           <div>
@@ -365,7 +384,6 @@ function home(){
           </div>
         </div>
 
-        <!-- Botones -->
         <div class="actions">
           <button class="primary" id="goEvidence">Evidencias</button>
           <button class="secondary" id="goBelts">Cinturones</button>
@@ -398,17 +416,25 @@ function home(){
     </div>
   `;
 
-  document.getElementById("areaSelector").onchange = (e)=>{
-    state.activeArea = e.target.value;
-    save(); render("home");
-  };
+  wireOtherField("dept", "dept-other");
+  wireOtherField("role", "role-other");
+
+  document.getElementById("areaSelector").onchange = (e)=>{ state.activeArea=e.target.value; save(); render("home"); };
   document.getElementById("goEvidence").onclick = ()=>render("evidence");
   document.getElementById("goBelts").onclick    = ()=>render("belts");
   document.getElementById("saveMe").onclick     = ()=>{
-    state.me.name       = document.getElementById("name").value.trim();
-    state.me.surname    = document.getElementById("surname").value.trim();
-    state.me.department = document.getElementById("dept").value;
-    state.me.role       = document.getElementById("role").value;
+    const dept      = document.getElementById("dept").value;
+    const deptOther = document.getElementById("dept-other").value.trim();
+    const role      = document.getElementById("role").value;
+    const roleOther = document.getElementById("role-other").value.trim();
+    if(dept==="Otro" && !deptOther) return alert("Especifica tu departamento.");
+    if(role==="Otro" && !roleOther) return alert("Especifica tu rol.");
+    state.me.name            = document.getElementById("name").value.trim();
+    state.me.surname         = document.getElementById("surname").value.trim();
+    state.me.department      = dept;
+    state.me.departmentOther = deptOther;
+    state.me.role            = role;
+    state.me.roleOther       = roleOther;
     save(); render("home");
   };
 }
@@ -507,7 +533,6 @@ function evidence(){
   const activeId = state.activeArea || "collab";
   const ad       = areaData(activeId);
   const area     = areaObj(activeId);
-
   const areaSelector = CONFIG.areas.map(a=>`
     <option value="${a.id}" ${a.id===activeId?"selected":""}>${a.icon} ${a.name}</option>
   `).join("");
@@ -595,11 +620,7 @@ function evidence(){
     </div>
   `;
 
-  document.getElementById("evAreaSelector").onchange = (e)=>{
-    state.activeArea = e.target.value;
-    save(); render("evidence");
-  };
-
+  document.getElementById("evAreaSelector").onchange = (e)=>{ state.activeArea=e.target.value; save(); render("evidence"); };
   document.getElementById("btnTraining").onclick = ()=>{
     state.areas[activeId].trainingDone = true;
     state.areas[activeId].belt = "yellow";
