@@ -16,7 +16,7 @@ const CONFIG = {
     { id:"white",  name:"Cinturón Blanco",          color:"#e0e0ff" },
     { id:"yellow", name:"Cinturón Amarillo",         color:"#ffe600" },
     { id:"green",  name:"Cinturón Verde",            color:"#39ff14" },
-    { id:"black",  name:"Cinturón Negro (Champion)", color:"#00cfff" }
+    { id:"black",  name:"Cinturón Negro (Champion)", color:"#ffffff" }
   ]
 };
 
@@ -169,22 +169,22 @@ function belts(){
           @keyframes pw { 0%,100%{opacity:.6} 50%{opacity:1} }
           @keyframes py { 0%,100%{opacity:.5} 50%{opacity:1} }
           @keyframes pg { 0%,100%{opacity:.5} 50%{opacity:1} }
-          @keyframes pb { 0%,100%{opacity:.4} 50%{opacity:1} }
+          @keyframes pb { 0%,100%{opacity:.6} 50%{opacity:1} }
           .dw { animation: pw 1.8s ease-in-out infinite; }
           .dy { animation: py 2.1s ease-in-out infinite; }
           .dg { animation: pg 2.4s ease-in-out infinite; }
           .db { animation: pb 2.8s ease-in-out infinite; }
           .brow {
             display: grid;
-            grid-template-columns: 60px 1fr;
+            grid-template-columns: 64px 1fr;
             align-items: center;
-            gap: 0 22px;
+            gap: 0 20px;
             padding: 20px 28px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
           }
           .brow:last-child { border-bottom: none; }
           .bicon { display:flex; flex-direction:column; align-items:center; gap:4px; }
-          .bline { width:1px; height:22px; background:rgba(255,255,255,0.12); }
+          .bline { width:1px; height:20px; background:rgba(255,255,255,0.1); }
           .brow:last-child .bline { display:none; }
           .blvl { font-size:10px; font-weight:700; letter-spacing:0.12em; margin-bottom:3px; }
           .bname { font-size:16px; font-weight:600; margin-bottom:4px; }
@@ -215,10 +215,10 @@ function belts(){
           <!-- BLANCO -->
           <div class="brow">
             <div class="bicon">
-              <svg width="48" height="48" viewBox="0 0 48 48">
-                <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="none" stroke="#e0e0ff" stroke-width="1.5"/>
-                <polygon points="24,10 36,17 36,31 24,38 12,31 12,17" fill="rgba(224,224,255,0.08)" stroke="#e0e0ff" stroke-width="0.8"/>
-                <circle cx="24" cy="24" r="5" fill="#e0e0ff" class="dw"/>
+              <svg width="56" height="32" viewBox="0 0 56 32">
+                <rect x="1" y="8" width="54" height="16" rx="3" fill="rgba(224,224,255,0.08)" stroke="#e0e0ff" stroke-width="1.2"/>
+                <rect x="22" y="1" width="12" height="30" rx="2" fill="rgba(224,224,255,0.12)" stroke="#e0e0ff" stroke-width="1.2"/>
+                <rect x="24" y="11" width="8" height="10" rx="1.5" fill="none" stroke="#e0e0ff" stroke-width="1" class="dw"/>
               </svg>
               <div class="bline"></div>
             </div>
@@ -233,10 +233,10 @@ function belts(){
           <!-- AMARILLO -->
           <div class="brow">
             <div class="bicon">
-              <svg width="48" height="48" viewBox="0 0 48 48">
-                <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="none" stroke="#ffe600" stroke-width="1.5"/>
-                <polygon points="24,10 36,17 36,31 24,38 12,31 12,17" fill="rgba(255,230,0,0.1)" stroke="#ffe600" stroke-width="0.8"/>
-                <circle cx="24" cy="24" r="5" fill="#ffe600" class="dy"/>
+              <svg width="56" height="32" viewBox="0 0 56 32">
+                <rect x="1" y="8" width="54" height="16" rx="3" fill="rgba(255,230,0,0.1)" stroke="#ffe600" stroke-width="1.2"/>
+                <rect x="22" y="1" width="12" height="30" rx="2" fill="rgba(255,230,0,0.15)" stroke="#ffe600" stroke-width="1.2"/>
+                <rect x="24" y="11" width="8" height="10" rx="1.5" fill="none" stroke="#ffe600" stroke-width="1" class="dy"/>
               </svg>
               <div class="bline"></div>
             </div>
@@ -251,10 +251,10 @@ function belts(){
           <!-- VERDE -->
           <div class="brow">
             <div class="bicon">
-              <svg width="48" height="48" viewBox="0 0 48 48">
-                <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="none" stroke="#39ff14" stroke-width="1.5"/>
-                <polygon points="24,10 36,17 36,31 24,38 12,31 12,17" fill="rgba(57,255,20,0.08)" stroke="#39ff14" stroke-width="0.8"/>
-                <circle cx="24" cy="24" r="5" fill="#39ff14" class="dg"/>
+              <svg width="56" height="32" viewBox="0 0 56 32">
+                <rect x="1" y="8" width="54" height="16" rx="3" fill="rgba(57,255,20,0.08)" stroke="#39ff14" stroke-width="1.2"/>
+                <rect x="22" y="1" width="12" height="30" rx="2" fill="rgba(57,255,20,0.12)" stroke="#39ff14" stroke-width="1.2"/>
+                <rect x="24" y="11" width="8" height="10" rx="1.5" fill="none" stroke="#39ff14" stroke-width="1" class="dg"/>
               </svg>
               <div class="bline"></div>
             </div>
@@ -269,17 +269,17 @@ function belts(){
           <!-- NEGRO -->
           <div class="brow">
             <div class="bicon">
-              <svg width="48" height="48" viewBox="0 0 48 48">
-                <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="none" stroke="#00cfff" stroke-width="1.5"/>
-                <polygon points="24,10 36,17 36,31 24,38 12,31 12,17" fill="rgba(0,207,255,0.08)" stroke="#00cfff" stroke-width="0.8"/>
-                <circle cx="24" cy="24" r="5" fill="#00cfff" class="db"/>
+              <svg width="56" height="32" viewBox="0 0 56 32">
+                <rect x="1" y="8" width="54" height="16" rx="3" fill="rgba(255,255,255,0.95)" stroke="#fff" stroke-width="1.2"/>
+                <rect x="22" y="1" width="12" height="30" rx="2" fill="rgba(255,255,255,0.95)" stroke="#fff" stroke-width="1.2"/>
+                <rect x="24" y="11" width="8" height="10" rx="1.5" fill="rgba(10,10,30,0.9)" stroke="#1a1a3e" stroke-width="1.5" class="db"/>
               </svg>
             </div>
             <div>
-              <div class="blvl" style="color:#00cfff;">NIVEL 04</div>
-              <div class="bname" style="color:#80e8ff;">Cinturón Negro <span style="color:rgba(255,255,255,0.3); font-weight:400; font-size:13px;">— Champion</span></div>
+              <div class="blvl" style="color:rgba(255,255,255,0.5);">NIVEL 04</div>
+              <div class="bname" style="color:#ffffff; text-shadow:0 0 12px rgba(80,120,255,0.8), 0 0 3px rgba(80,120,255,0.6);">Cinturón Negro <span style="color:rgba(255,255,255,0.35); font-weight:400; font-size:13px; text-shadow:none;">— Champion</span></div>
               <div class="bdesc">Caso validado por Genius365. Eres referente interno y acompañas a otros en el recorrido.</div>
-              <span class="btag" style="background:rgba(0,207,255,0.1); color:#00cfff; border:1px solid rgba(0,207,255,0.35);">Validación Genius365</span>
+              <span class="btag" style="background:rgba(255,255,255,0.08); color:#ffffff; border:1px solid rgba(255,255,255,0.25);">Validación Genius365</span>
             </div>
           </div>
 
