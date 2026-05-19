@@ -164,7 +164,6 @@ function belts(){
   app.innerHTML = `
     <div class="grid">
       <section class="card col12" style="padding:0; overflow:hidden;">
-
         <style>
           @keyframes pw { 0%,100%{opacity:.6} 50%{opacity:1} }
           @keyframes py { 0%,100%{opacity:.5} 50%{opacity:1} }
@@ -174,45 +173,27 @@ function belts(){
           .dy { animation: py 2.1s ease-in-out infinite; }
           .dg { animation: pg 2.4s ease-in-out infinite; }
           .db { animation: pb 2.8s ease-in-out infinite; }
-          .brow {
-            display: grid;
-            grid-template-columns: 64px 1fr;
-            align-items: center;
-            gap: 0 20px;
-            padding: 20px 28px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-          }
-          .brow:last-child { border-bottom: none; }
+          .brow { display:grid; grid-template-columns:64px 1fr; align-items:center; gap:0 20px; padding:20px 28px; border-bottom:1px solid rgba(255,255,255,0.06); }
+          .brow:last-child { border-bottom:none; }
           .bicon { display:flex; flex-direction:column; align-items:center; gap:4px; }
           .bline { width:1px; height:20px; background:rgba(255,255,255,0.1); }
           .brow:last-child .bline { display:none; }
           .blvl { font-size:10px; font-weight:700; letter-spacing:0.12em; margin-bottom:3px; }
           .bname { font-size:16px; font-weight:600; margin-bottom:4px; }
           .bdesc { font-size:13px; opacity:0.6; margin-bottom:0; }
-          .btag {
-            display:inline-block; font-size:11px; font-weight:600;
-            padding:3px 10px; border-radius:999px; margin-top:7px;
-            letter-spacing:0.04em;
-          }
-          .bhead {
-            display:flex; align-items:center; gap:10px;
-            padding:22px 28px 16px;
-            border-bottom:1px solid rgba(255,255,255,0.08);
-          }
+          .btag { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; margin-top:7px; letter-spacing:0.04em; }
+          .bhead { display:flex; align-items:center; gap:10px; padding:22px 28px 16px; border-bottom:1px solid rgba(255,255,255,0.08); }
           .bhead-lbl { font-size:10px; letter-spacing:0.16em; font-weight:700; opacity:0.4; color:#fff; }
         </style>
 
         <div style="background:#020b2e; border-radius:inherit; color:#fff;">
-
           <div class="bhead">
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-              <polygon points="9,1 11.5,6.5 17.5,7.2 13,11.5 14.3,17.5 9,14.5 3.7,17.5 5,11.5 0.5,7.2 6.5,6.5"
-                fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+              <polygon points="9,1 11.5,6.5 17.5,7.2 13,11.5 14.3,17.5 9,14.5 3.7,17.5 5,11.5 0.5,7.2 6.5,6.5" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
             </svg>
             <span class="bhead-lbl">RUTA DE CERTIFICACIÓN — GENIUS365</span>
           </div>
 
-          <!-- BLANCO -->
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -230,7 +211,6 @@ function belts(){
             </div>
           </div>
 
-          <!-- AMARILLO -->
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -248,7 +228,6 @@ function belts(){
             </div>
           </div>
 
-          <!-- VERDE -->
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -266,7 +245,6 @@ function belts(){
             </div>
           </div>
 
-          <!-- NEGRO -->
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -282,7 +260,6 @@ function belts(){
               <span class="btag" style="background:rgba(255,255,255,0.08); color:#ffffff; border:1px solid rgba(255,255,255,0.25);">Validación Genius365</span>
             </div>
           </div>
-
         </div>
       </section>
     </div>
@@ -298,36 +275,85 @@ function evidence(){
 
   app.innerHTML = `
     <div class="grid">
-      <section class="card col6">
-        <h2>Amarillo (Formación)</h2>
-        <p class="note">Blanco → Amarillo: confirma asistencia.</p>
-        <div class="actions">
-          <button class="primary" id="btnTraining" ${state.me.belt==="white" ? "" : "disabled"}>Confirmar asistencia</button>
-        </div>
-        <p class="note">Estado: ${e.trainingDone ? "✅ Registrado" : "⏳ Pendiente"}</p>
-      </section>
+      <section class="card col12" style="padding:0; overflow:hidden;">
+        <style>
+          .ev-wrap { background:#020b2e; border-radius:inherit; color:#fff; padding:28px; }
+          .ev-head { display:flex; align-items:center; gap:10px; margin-bottom:28px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08); }
+          .ev-head-lbl { font-size:10px; letter-spacing:0.16em; font-weight:700; opacity:0.4; }
+          .ev-step { display:grid; grid-template-columns:48px 1fr; gap:0 20px; margin-bottom:8px; }
+          .ev-left { display:flex; flex-direction:column; align-items:center; }
+          .ev-dot { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+          .ev-vline { width:1px; flex:1; min-height:24px; margin:4px 0; }
+          .ev-step:last-child .ev-vline { display:none; }
+          .ev-card { border-radius:12px; padding:18px 20px; margin-bottom:20px; border:1px solid; }
+          .ev-card h3 { font-size:14px; font-weight:700; margin:0 0 4px; letter-spacing:0.04em; }
+          .ev-sub { font-size:12px; opacity:0.5; margin-bottom:14px; }
+          .ev-status { font-size:12px; margin-top:12px; opacity:0.6; }
+          .ev-status b { opacity:1; }
+          .ev-check { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; opacity:0.8; }
+          .ev-check input { accent-color:#00e676; width:15px; height:15px; }
+          .ev-input { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:10px 12px; color:#fff; font-size:13px; margin-bottom:10px; box-sizing:border-box; }
+          textarea.ev-input { min-height:80px; resize:vertical; }
+          .ev-label { font-size:12px; opacity:0.5; display:block; margin-bottom:4px; }
+          .ev-btn-disabled { display:inline-block; padding:9px 22px; border-radius:999px; font-size:13px; font-weight:700; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.1); margin-top:4px; cursor:not-allowed; }
+        </style>
 
-      <section class="card col6">
-        <h2>Verde (E-learning + Examen)</h2>
-        <p class="note">Amarillo → Verde: e-learning + examen.</p>
-        <label><input type="checkbox" id="elearn" ${e.elearningDone?"checked":""}/> E-learning completado</label>
-        <label><input type="checkbox" id="exam"   ${e.examPassed?"checked":""}/>   Examen aprobado</label>
-        <div class="actions">
-          <button class="primary" id="btnGreen" ${state.me.belt==="yellow" ? "" : "disabled"}>Subir a Verde</button>
-        </div>
-      </section>
+        <div class="ev-wrap">
+          <div class="ev-head">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+              <polygon points="9,1 11.5,6.5 17.5,7.2 13,11.5 14.3,17.5 9,14.5 3.7,17.5 5,11.5 0.5,7.2 6.5,6.5" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+            </svg>
+            <span class="ev-head-lbl">EVIDENCIAS — RUTA DE CERTIFICACIÓN</span>
+          </div>
 
-      <section class="card col12">
-        <h2>Negro (Caso + validación Genius365)</h2>
-        <p class="note">Solo desde Verde. Envía idea + vídeo y queda en revisión.</p>
-        <label>Idea</label>
-        <textarea id="idea">${escapeHtml(e.usecase.idea)}</textarea>
-        <label>Link vídeo</label>
-        <input id="video" value="${escapeHtml(e.usecase.videoUrl)}" placeholder="https://..."/>
-        <div class="actions">
-          <button class="secondary" id="btnSubmit" ${state.me.belt==="green" ? "" : "disabled"}>Enviar a revisión</button>
+          <!-- PASO 1 — AMARILLO -->
+          <div class="ev-step">
+            <div class="ev-left">
+              <div class="ev-dot" style="background:rgba(255,230,0,0.15); color:#ffe600; border:1.5px solid #ffe600;">01</div>
+              <div class="ev-vline" style="background:rgba(255,230,0,0.2);"></div>
+            </div>
+            <div class="ev-card" style="border-color:rgba(255,230,0,0.25); background:rgba(255,230,0,0.04);">
+              <h3 style="color:#ffe600;">Cinturón Amarillo — Formación</h3>
+              <div class="ev-sub">Blanco → Amarillo: confirma tu asistencia a la sesión formativa</div>
+              <button class="primary" id="btnTraining" ${state.me.belt==="white" ? "" : "disabled"}>Confirmar asistencia</button>
+              <div class="ev-status">Estado: ${e.trainingDone ? "✅ Registrado" : "⏳ Pendiente"}</div>
+            </div>
+          </div>
+
+          <!-- PASO 2 — VERDE -->
+          <div class="ev-step">
+            <div class="ev-left">
+              <div class="ev-dot" style="background:rgba(57,255,20,0.1); color:#39ff14; border:1.5px solid rgba(57,255,20,0.4);">02</div>
+              <div class="ev-vline" style="background:rgba(57,255,20,0.2);"></div>
+            </div>
+            <div class="ev-card" style="border-color:rgba(57,255,20,0.2); background:rgba(57,255,20,0.03);">
+              <h3 style="color:#39ff14;">Cinturón Verde — E-learning + Examen</h3>
+              <div class="ev-sub">Amarillo → Verde: completa el e-learning y supera el examen</div>
+              <div class="ev-check"><input type="checkbox" id="elearn" ${e.elearningDone?"checked":""}/> E-learning completado</div>
+              <div class="ev-check"><input type="checkbox" id="exam" ${e.examPassed?"checked":""}/> Examen aprobado</div>
+              <button class="primary" id="btnGreen" ${state.me.belt==="yellow" ? "" : "disabled"}>Subir a Verde</button>
+            </div>
+          </div>
+
+          <!-- PASO 3 — NEGRO -->
+          <div class="ev-step">
+            <div class="ev-left">
+              <div class="ev-dot" style="background:rgba(255,255,255,0.08); color:#fff; border:1.5px solid rgba(255,255,255,0.2);">03</div>
+            </div>
+            <div class="ev-card" style="border-color:rgba(255,255,255,0.12); background:rgba(255,255,255,0.03);">
+              <h3 style="color:#fff; text-shadow:0 0 12px rgba(80,120,255,0.8);">Cinturón Negro — Caso real</h3>
+              <div class="ev-sub">Verde → Negro: envía tu idea y vídeo para validación Genius365</div>
+              <label class="ev-label">Idea</label>
+              <textarea class="ev-input" id="idea">${escapeHtml(e.usecase.idea)}</textarea>
+              <label class="ev-label">Link vídeo</label>
+              <input class="ev-input" id="video" value="${escapeHtml(e.usecase.videoUrl)}" placeholder="https://..."/>
+              <br/>
+              <button class="secondary" id="btnSubmit" ${state.me.belt==="green" ? "" : "disabled"}>Enviar a revisión</button>
+              <div class="ev-status">Estado del caso: <b>${escapeHtml(e.usecase.status)}</b></div>
+            </div>
+          </div>
+
         </div>
-        <p class="note">Estado del caso: <b>${escapeHtml(e.usecase.status)}</b></p>
       </section>
     </div>
   `;
