@@ -20,7 +20,6 @@ const CONFIG = {
   ]
 };
 
-// Datos ficticios de ranking por área
 const RANKING_DATA = {
   collab: [
     { name:"Ana Martínez",    belt:"black",  beltName:"Negro"    },
@@ -107,35 +106,31 @@ function render(route){
   (views[route] || home)();
 }
 
-// ---------- Helpers ranking ----------
+// ---------- Ranking helpers ----------
 
 function getUserRankPosition(area, userBelt){
   const beltOrder = { black:4, green:3, yellow:2, white:1 };
   const list = RANKING_DATA[area] || [];
-  // Contar cuántos ficticios tienen cinturón mayor
   const above = list.filter(p => (beltOrder[p.belt]||0) > (beltOrder[userBelt]||0)).length;
   return above + 1;
 }
 
 function getRankingRows(area, userName, userBelt, userPos){
+  const beltOrder = { black:4, green:3, yellow:2, white:1 };
   const list = RANKING_DATA[area] || [];
   const medals = ["🥇","🥈","🥉"];
-  const posLabels = ["1","2","3","4","5","6","7","8"];
-
-  // Insertar usuario en la lista según su posición
+  const userEntry = {
+    name: userName || APP.clientName,
+    belt: userBelt,
+    beltName: CONFIG.belts.find(b=>b.id===userBelt)?.name || "Blanco",
+    isMe: true
+  };
   const fullList = [...list];
-  const userEntry = { name: userName || APP.clientName, belt: userBelt, beltName: CONFIG.belts.find(b=>b.id===userBelt)?.name || "Blanco", isMe: true };
-
-  // Insertar al usuario en su posición (0-indexed)
   fullList.splice(userPos - 1, 0, userEntry);
-
-  // Mostrar top 5, asegurando que el usuario aparece
   let display = fullList.slice(0, 5);
-  if(!display.find(p=>p.isMe)){
-    display = [...fullList.slice(0,4), userEntry];
-  }
+  if(!display.find(p=>p.isMe)) display = [...fullList.slice(0,4), userEntry];
 
-  return display.map((p, i) => {
+  return display.map((p) => {
     const pos = fullList.indexOf(p) + 1;
     const isMe = !!p.isMe;
     const medal = pos <= 3 ? medals[pos-1] : pos;
@@ -197,11 +192,21 @@ function home(){
     return;
   }
 
-  const belt = beltObj(state.me.belt);
-  const area = areaObj(state.me.area);
-  const userPos = getUserRankPosition(state.me.area, state.me.belt);
-  const rankingRows = getRankingRows(state.me.area, state.me.name, state.me.belt, userPos);
-  const areaTag = escapeHtml(area.name.toUpperCase());
+  const belt     = beltObj(state.me.belt);
+  const area     = areaObj(state.me.area);
+  const userPos  = getUserRankPosition(state.me.area, state.me.belt);
+  const rankRows = getRankingRows(state.me.area, state.me.name, state.me.belt, userPos);
+  const beltOrder = ["white","yellow","green","black"];
+  const beltIdx   = beltOrder.indexOf(state.me.belt);
+  const dotColors = { white:"#e5e7eb", yellow:"#fbbf24", green:"#34d399", black:"#374151" };
+
+  const barDots = beltOrder.map((b, i) => {
+    let cls = "";
+    if(i < beltIdx)  cls = `background:#00e676; border-color:#00e676; box-shadow:0 0 6px rgba(0,230,118,0.6);`;
+    else if(i === beltIdx) cls = `background:#fff; border-color:#fff; box-shadow:0 0 8px rgba(255,255,255,0.5);`;
+    else cls = `background:transparent; border-color:rgba(255,255,255,0.2);`;
+    return `<div style="width:8px; height:8px; border-radius:50%; border:1.5px solid; ${cls}"></div>`;
+  }).join("");
 
   app.innerHTML = `
     <div class="grid">
@@ -222,19 +227,50 @@ function home(){
         </div>
       </section>
 
-      <!-- PROGRESO — derecha arriba -->
+      <!-- MI PROGRESO — derecha -->
       <section class="card col8">
         <h2>Mi progreso</h2>
-        <div class="badge">Área: <b>${escapeHtml(area.name)}</b></div>
-        <div class="badge">
-          Nivel:
-          <span class="progress-level belt-${belt.id}">
-            <span class="belt-dot"></span>
-            <span class="belt-title">${escapeHtml(belt.name)}</span>
-          </span>
+
+        <!-- Chips área + nivel -->
+        <div style="display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:10px; padding:8px 14px;">
+            <div>
+              <span style="font-size:10px; opacity:0.45; letter-spacing:0.08em; display:block; margin-bottom:1px;">ÁREA</span>
+              <span style="font-weight:700; font-size:14px;">${escapeHtml(area.name)}</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:7px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); border-radius:10px; padding:8px 14px;">
+            <span style="width:10px; height:10px; border-radius:50%; background:${dotColors[state.me.belt] || "#e5e7eb"}; display:inline-block; flex-shrink:0;"></span>
+            <div>
+              <span style="font-size:10px; opacity:0.45; letter-spacing:0.08em; display:block; margin-bottom:1px;">NIVEL</span>
+              <span style="font-weight:700; font-size:14px;">${escapeHtml(belt.name)}</span>
+            </div>
+          </div>
         </div>
-        <div class="progress"><div style="width:${progressPct()}%"></div></div>
-        <p class="note">Siguiente paso: ${escapeHtml(nextStepText())}</p>
+
+        <!-- Barra de progreso con etiquetas -->
+        <div style="margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; font-size:10px; opacity:0.4; margin-bottom:6px; letter-spacing:0.06em;">
+            <span>BLANCO</span><span>AMARILLO</span><span>VERDE</span><span>NEGRO</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden;">
+            <div style="height:100%; width:${progressPct()}%; border-radius:99px; background:linear-gradient(90deg,#00e676,#00bfa5); box-shadow:0 0 10px rgba(0,230,118,0.5);"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            ${barDots}
+          </div>
+        </div>
+
+        <!-- Siguiente paso destacado -->
+        <div style="display:flex; align-items:center; gap:10px; background:rgba(0,207,255,0.07); border:1px solid rgba(0,207,255,0.2); border-radius:10px; padding:10px 14px; margin-bottom:18px;">
+          <span style="font-size:16px; flex-shrink:0;">→</span>
+          <div>
+            <span style="font-size:10px; opacity:0.45; letter-spacing:0.08em; display:block; margin-bottom:1px;">SIGUIENTE PASO</span>
+            <span style="font-size:13px; font-weight:600; color:#7dd3fc;">${escapeHtml(nextStepText())}</span>
+          </div>
+        </div>
+
+        <!-- Botones — sin cambios -->
         <div class="actions">
           <button class="primary" id="goEvidence">Evidencias</button>
           <button class="secondary" id="goBelts">Cinturones</button>
@@ -245,10 +281,8 @@ function home(){
       <section class="card col12">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
           <h2 style="margin:0;">Ranking</h2>
-          <span style="font-size:11px; font-weight:700; letter-spacing:0.1em; padding:3px 10px; border-radius:999px; background:rgba(0,207,255,0.1); color:#7dd3fc; border:1px solid rgba(0,207,255,0.25);">${areaTag}</span>
+          <span style="font-size:11px; font-weight:700; letter-spacing:0.1em; padding:3px 10px; border-radius:999px; background:rgba(0,207,255,0.1); color:#7dd3fc; border:1px solid rgba(0,207,255,0.25);">${escapeHtml(area.name.toUpperCase())}</span>
         </div>
-
-        <!-- Tu posición destacada -->
         <div style="display:flex; align-items:center; gap:16px; background:rgba(0,230,118,0.06); border:1px solid rgba(0,230,118,0.2); border-radius:12px; padding:12px 18px; margin-bottom:16px;">
           <div>
             <div style="font-size:10px; opacity:0.5; margin-bottom:2px; letter-spacing:0.08em;">TU POSICIÓN</div>
@@ -263,9 +297,7 @@ function home(){
             </div>
           </div>
         </div>
-
-        <!-- Top 5 -->
-        ${rankingRows}
+        ${rankRows}
       </section>
 
     </div>
@@ -423,7 +455,6 @@ function evidence(){
             </svg>
             <span class="ev-head-lbl">EVIDENCIAS — RUTA DE CERTIFICACIÓN</span>
           </div>
-
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(255,230,0,0.15); color:#ffe600; border:1.5px solid #ffe600;">01</div>
@@ -436,7 +467,6 @@ function evidence(){
               <div class="ev-status">Estado: ${e.trainingDone ? "✅ Registrado" : "⏳ Pendiente"}</div>
             </div>
           </div>
-
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(57,255,20,0.1); color:#39ff14; border:1.5px solid rgba(57,255,20,0.4);">02</div>
@@ -450,7 +480,6 @@ function evidence(){
               <button class="primary" id="btnGreen" ${state.me.belt==="yellow" ? "" : "disabled"}>Subir a Verde</button>
             </div>
           </div>
-
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(255,255,255,0.08); color:#fff; border:1.5px solid rgba(255,255,255,0.2);">03</div>
@@ -477,7 +506,6 @@ function evidence(){
     state.me.belt = "yellow";
     save(); render("evidence");
   };
-
   document.getElementById("btnGreen").onclick = ()=>{
     state.evidence.elearningDone = document.getElementById("elearn").checked;
     state.evidence.examPassed    = document.getElementById("exam").checked;
@@ -488,7 +516,6 @@ function evidence(){
       alert("Marca e-learning + examen para pasar a Verde.");
     }
   };
-
   document.getElementById("btnSubmit").onclick = ()=>{
     const idea     = document.getElementById("idea").value.trim();
     const videoUrl = document.getElementById("video").value.trim();
@@ -505,7 +532,6 @@ function license(){
   if(state.userType !== "free"){
     return messageOnly("Solicitud de licencia", "Esta sección es para usuarios de Copilot Chat (Free).");
   }
-
   app.innerHTML = `
     <div class="grid">
       <section class="card col12">
@@ -534,7 +560,6 @@ function license(){
       </section>
     </div>
   `;
-
   document.getElementById("sendReq").onclick = ()=>{
     const req = {
       id:     makeId(),
