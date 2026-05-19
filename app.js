@@ -181,7 +181,7 @@ function otherFieldHtml(selectId, options, currentValue, otherValue, otherInputI
     <label>${label}</label>
     <select id="${selectId}">
       <option value="">Selecciona…</option>
-      ${options.map(o=>`<option value="${o}" ${currentValue===o?"selected":""}>${o}</option>`).join("")}
+      ${options.map(o=>`<option value="${o}" ${currentValue===o?"selected":""} style="background:#1e2a4a;color:#fff;">${o}</option>`).join("")}
     </select>
     <div id="${otherInputId}-wrap" style="margin-top:8px;display:${isOtro?"block":"none"};">
       <input id="${otherInputId}" value="${escapeHtml(otherValue||"")}" placeholder="Especifica…" style="margin-top:0;"/>
@@ -314,7 +314,7 @@ function home(){
   }).join("");
 
   const areaSelector = CONFIG.areas.map(a=>`
-    <option value="${a.id}" ${a.id===activeId?"selected":""}>${a.icon} ${a.name}</option>
+    <option value="${a.id}" ${a.id===activeId?"selected":""} style="background:#1e2a4a;color:#fff;">${a.icon} ${a.name}</option>
   `).join("");
 
   const fullName = escapeHtml(`${state.me.name} ${state.me.surname}`);
@@ -534,7 +534,7 @@ function evidence(){
   const ad       = areaData(activeId);
   const area     = areaObj(activeId);
   const areaSelector = CONFIG.areas.map(a=>`
-    <option value="${a.id}" ${a.id===activeId?"selected":""}>${a.icon} ${a.name}</option>
+    <option value="${a.id}" ${a.id===activeId?"selected":""} style="background:#1e2a4a;color:#fff;">${a.icon} ${a.name}</option>
   `).join("");
 
   app.innerHTML = `
