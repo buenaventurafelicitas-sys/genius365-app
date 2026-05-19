@@ -20,6 +20,45 @@ const CONFIG = {
   ]
 };
 
+// Datos ficticios de ranking por área
+const RANKING_DATA = {
+  collab: [
+    { name:"Ana Martínez",    belt:"black",  beltName:"Negro"    },
+    { name:"Carlos López",    belt:"green",  beltName:"Verde"    },
+    { name:"Marta Ruiz",      belt:"yellow", beltName:"Amarillo" },
+    { name:"Pedro Sanz",      belt:"white",  beltName:"Blanco"   },
+    { name:"Laura García",    belt:"white",  beltName:"Blanco"   }
+  ],
+  comm: [
+    { name:"Sofía Herrera",   belt:"black",  beltName:"Negro"    },
+    { name:"Javier Moreno",   belt:"green",  beltName:"Verde"    },
+    { name:"Elena Castro",    belt:"yellow", beltName:"Amarillo" },
+    { name:"Tomás Vega",      belt:"white",  beltName:"Blanco"   },
+    { name:"Isabel Pardo",    belt:"white",  beltName:"Blanco"   }
+  ],
+  prod: [
+    { name:"Miguel Ángel",    belt:"black",  beltName:"Negro"    },
+    { name:"Patricia Nieto",  belt:"green",  beltName:"Verde"    },
+    { name:"Roberto Calvo",   belt:"yellow", beltName:"Amarillo" },
+    { name:"Nuria Blanco",    belt:"white",  beltName:"Blanco"   },
+    { name:"Diego Romero",    belt:"white",  beltName:"Blanco"   }
+  ],
+  auto: [
+    { name:"Lucía Fernández", belt:"black",  beltName:"Negro"    },
+    { name:"Andrés Gil",      belt:"green",  beltName:"Verde"    },
+    { name:"Carmen Rubio",    belt:"yellow", beltName:"Amarillo" },
+    { name:"Víctor Ortega",   belt:"white",  beltName:"Blanco"   },
+    { name:"Raquel Peña",     belt:"white",  beltName:"Blanco"   }
+  ]
+};
+
+const BELT_COLORS = {
+  white:  "#e5e7eb",
+  yellow: "#fbbf24",
+  green:  "#34d399",
+  black:  "#374151"
+};
+
 const defaultState = {
   userType: "",
   me: { name:"", role:"", area:"collab", belt:"white" },
@@ -68,6 +107,58 @@ function render(route){
   (views[route] || home)();
 }
 
+// ---------- Helpers ranking ----------
+
+function getUserRankPosition(area, userBelt){
+  const beltOrder = { black:4, green:3, yellow:2, white:1 };
+  const list = RANKING_DATA[area] || [];
+  // Contar cuántos ficticios tienen cinturón mayor
+  const above = list.filter(p => (beltOrder[p.belt]||0) > (beltOrder[userBelt]||0)).length;
+  return above + 1;
+}
+
+function getRankingRows(area, userName, userBelt, userPos){
+  const list = RANKING_DATA[area] || [];
+  const medals = ["🥇","🥈","🥉"];
+  const posLabels = ["1","2","3","4","5","6","7","8"];
+
+  // Insertar usuario en la lista según su posición
+  const fullList = [...list];
+  const userEntry = { name: userName || APP.clientName, belt: userBelt, beltName: CONFIG.belts.find(b=>b.id===userBelt)?.name || "Blanco", isMe: true };
+
+  // Insertar al usuario en su posición (0-indexed)
+  fullList.splice(userPos - 1, 0, userEntry);
+
+  // Mostrar top 5, asegurando que el usuario aparece
+  let display = fullList.slice(0, 5);
+  if(!display.find(p=>p.isMe)){
+    display = [...fullList.slice(0,4), userEntry];
+  }
+
+  return display.map((p, i) => {
+    const pos = fullList.indexOf(p) + 1;
+    const isMe = !!p.isMe;
+    const medal = pos <= 3 ? medals[pos-1] : pos;
+    const dotColor = BELT_COLORS[p.belt] || "#e5e7eb";
+    return `
+      <div style="
+        display:flex; align-items:center; gap:10px;
+        padding:9px 14px; border-radius:10px;
+        background:${isMe ? "rgba(0,230,118,0.08)" : "rgba(255,255,255,0.04)"};
+        border:1px solid ${isMe ? "rgba(0,230,118,0.25)" : "rgba(255,255,255,0.07)"};
+        margin-bottom:6px;
+      ">
+        <span style="width:22px; text-align:center; font-size:13px; font-weight:700; ${pos<=3?"":"opacity:0.45;"}">${medal}</span>
+        <span style="flex:1; font-size:13px; font-weight:${isMe?"700":"500"}; color:${isMe?"#00e676":"inherit"};">
+          ${escapeHtml(p.name)}${isMe ? ' <span style="font-size:11px; opacity:0.6; font-weight:400;">— Tú</span>' : ""}
+        </span>
+        <span style="width:9px; height:9px; border-radius:50%; background:${dotColor}; display:inline-block; flex-shrink:0; ${p.belt==="black"?"border:1px solid #555;":""}"></span>
+        <span style="font-size:11px; opacity:0.5;">${escapeHtml(p.beltName)}</span>
+      </div>
+    `;
+  }).join("");
+}
+
 // ---------- Screens ----------
 
 function onboarding(){
@@ -108,9 +199,30 @@ function home(){
 
   const belt = beltObj(state.me.belt);
   const area = areaObj(state.me.area);
+  const userPos = getUserRankPosition(state.me.area, state.me.belt);
+  const rankingRows = getRankingRows(state.me.area, state.me.name, state.me.belt, userPos);
+  const areaTag = escapeHtml(area.name.toUpperCase());
 
   app.innerHTML = `
     <div class="grid">
+
+      <!-- PERFIL — izquierda -->
+      <section class="card col4">
+        <h2>Mi perfil</h2>
+        <label>Nombre</label>
+        <input id="name" value="${escapeHtml(state.me.name)}" placeholder="Nombre Apellido"/>
+        <label>Puesto</label>
+        <input id="role" value="${escapeHtml(state.me.role)}" placeholder="Puesto"/>
+        <label>Área</label>
+        <select id="area">
+          ${CONFIG.areas.map(a=>`<option value="${a.id}" ${a.id===state.me.area?"selected":""}>${a.name}</option>`).join("")}
+        </select>
+        <div class="actions">
+          <button class="primary" id="saveMe">Guardar</button>
+        </div>
+      </section>
+
+      <!-- PROGRESO — derecha arriba -->
       <section class="card col8">
         <h2>Mi progreso</h2>
         <div class="badge">Área: <b>${escapeHtml(area.name)}</b></div>
@@ -129,20 +241,33 @@ function home(){
         </div>
       </section>
 
-      <section class="card col4">
-        <h2>Mi perfil</h2>
-        <label>Nombre</label>
-        <input id="name" value="${escapeHtml(state.me.name)}" placeholder="Nombre Apellido"/>
-        <label>Puesto</label>
-        <input id="role" value="${escapeHtml(state.me.role)}" placeholder="Puesto"/>
-        <label>Área</label>
-        <select id="area">
-          ${CONFIG.areas.map(a=>`<option value="${a.id}" ${a.id===state.me.area?"selected":""}>${a.name}</option>`).join("")}
-        </select>
-        <div class="actions">
-          <button class="primary" id="saveMe">Guardar</button>
+      <!-- RANKING — fila completa abajo -->
+      <section class="card col12">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+          <h2 style="margin:0;">Ranking</h2>
+          <span style="font-size:11px; font-weight:700; letter-spacing:0.1em; padding:3px 10px; border-radius:999px; background:rgba(0,207,255,0.1); color:#7dd3fc; border:1px solid rgba(0,207,255,0.25);">${areaTag}</span>
         </div>
+
+        <!-- Tu posición destacada -->
+        <div style="display:flex; align-items:center; gap:16px; background:rgba(0,230,118,0.06); border:1px solid rgba(0,230,118,0.2); border-radius:12px; padding:12px 18px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:10px; opacity:0.5; margin-bottom:2px; letter-spacing:0.08em;">TU POSICIÓN</div>
+            <div style="font-size:30px; font-weight:800; color:#00e676; line-height:1;">#${userPos}</div>
+          </div>
+          <div style="width:1px; height:36px; background:rgba(255,255,255,0.1);"></div>
+          <div>
+            <div style="font-size:10px; opacity:0.5; margin-bottom:4px; letter-spacing:0.08em;">NIVEL ACTUAL</div>
+            <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600;">
+              <span style="width:9px; height:9px; border-radius:50%; background:${BELT_COLORS[state.me.belt]}; display:inline-block;"></span>
+              ${escapeHtml(belt.name)}
+            </div>
+          </div>
+        </div>
+
+        <!-- Top 5 -->
+        ${rankingRows}
       </section>
+
     </div>
   `;
 
@@ -185,7 +310,6 @@ function belts(){
           .bhead { display:flex; align-items:center; gap:10px; padding:22px 28px 16px; border-bottom:1px solid rgba(255,255,255,0.08); }
           .bhead-lbl { font-size:10px; letter-spacing:0.16em; font-weight:700; opacity:0.4; color:#fff; }
         </style>
-
         <div style="background:#020b2e; border-radius:inherit; color:#fff;">
           <div class="bhead">
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
@@ -193,7 +317,6 @@ function belts(){
             </svg>
             <span class="bhead-lbl">RUTA DE CERTIFICACIÓN — GENIUS365</span>
           </div>
-
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -210,7 +333,6 @@ function belts(){
               <span class="btag" style="background:rgba(224,224,255,0.12); color:#e0e0ff; border:1px solid rgba(224,224,255,0.3);">Asistencia QR</span>
             </div>
           </div>
-
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -227,7 +349,6 @@ function belts(){
               <span class="btag" style="background:rgba(255,230,0,0.12); color:#ffe600; border:1px solid rgba(255,230,0,0.4);">E-learning + examen</span>
             </div>
           </div>
-
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -244,7 +365,6 @@ function belts(){
               <span class="btag" style="background:rgba(57,255,20,0.1); color:#39ff14; border:1px solid rgba(57,255,20,0.35);">Caso real + vídeo</span>
             </div>
           </div>
-
           <div class="brow">
             <div class="bicon">
               <svg width="56" height="32" viewBox="0 0 56 32">
@@ -295,9 +415,7 @@ function evidence(){
           .ev-input { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:10px 12px; color:#fff; font-size:13px; margin-bottom:10px; box-sizing:border-box; }
           textarea.ev-input { min-height:80px; resize:vertical; }
           .ev-label { font-size:12px; opacity:0.5; display:block; margin-bottom:4px; }
-          .ev-btn-disabled { display:inline-block; padding:9px 22px; border-radius:999px; font-size:13px; font-weight:700; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.1); margin-top:4px; cursor:not-allowed; }
         </style>
-
         <div class="ev-wrap">
           <div class="ev-head">
             <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
@@ -306,7 +424,6 @@ function evidence(){
             <span class="ev-head-lbl">EVIDENCIAS — RUTA DE CERTIFICACIÓN</span>
           </div>
 
-          <!-- PASO 1 — AMARILLO -->
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(255,230,0,0.15); color:#ffe600; border:1.5px solid #ffe600;">01</div>
@@ -320,7 +437,6 @@ function evidence(){
             </div>
           </div>
 
-          <!-- PASO 2 — VERDE -->
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(57,255,20,0.1); color:#39ff14; border:1.5px solid rgba(57,255,20,0.4);">02</div>
@@ -335,7 +451,6 @@ function evidence(){
             </div>
           </div>
 
-          <!-- PASO 3 — NEGRO -->
           <div class="ev-step">
             <div class="ev-left">
               <div class="ev-dot" style="background:rgba(255,255,255,0.08); color:#fff; border:1.5px solid rgba(255,255,255,0.2);">03</div>
@@ -352,7 +467,6 @@ function evidence(){
               <div class="ev-status">Estado del caso: <b>${escapeHtml(e.usecase.status)}</b></div>
             </div>
           </div>
-
         </div>
       </section>
     </div>
